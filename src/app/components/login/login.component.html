@@ -1,0 +1,26 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow rounded-4 p-4">
+        <h2 class="text-center mb-4">🔐 Login to Goceng</h2>
+
+        <form (ngSubmit)="onLogin()">
+          <div class="mb-3">
+            <label>Email</label>
+            <input [(ngModel)]="authRequest.email" name="email" type="email" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label>Password</label>
+            <input [(ngModel)]="authRequest.password" name="password" type="password" class="form-control" required />
+          </div>
+
+          <!-- Display error message if there's an error -->
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
