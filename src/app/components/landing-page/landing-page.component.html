@@ -1,0 +1,79 @@
+<div class="container mt-5">
+
+  <!-- Stats Section -->
+  <section class="stats bg-light p-4 rounded shadow-sm mb-5 text-center">
+    <h2 class="mb-4 text-primary"><i class="bi bi-bar-chart-line-fill"></i> Statistik Goceng</h2>
+    <p class="fs-5"><strong>Total Pinjaman:</strong> {{ stats.totalLoanDisbursed }}</p>
+    <p class="fs-5"><strong>Jumlah Download Aplikasi:</strong> {{ stats.appDownloads }}</p>
+  </section>
+
+  <!-- Loan Options Section -->
+  <section class="loan-options bg-white p-4 rounded shadow-sm mb-5">
+    <h2 class="mb-4 text-success"><i class="bi bi-cash-stack"></i> Opsi Pinjaman</h2>
+    <ul class="list-group">
+      <li *ngFor="let option of loanOptions; let i = index"
+          class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ option.amount }}</strong>
+          <span class="text-muted">- {{ option.duration }}</span>
+        </div>
+        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" [attr.data-bs-target]="'#loanModal' + i">
+          Detail
+        </button>
+      </li>
+    </ul>
+
+    <!-- Modals for each loan option -->
+    <ng-container *ngFor="let option of loanOptions; let i = index">
+      <div class="modal fade" [id]="'loanModal' + i" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Detail Pinjaman</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Jumlah Pinjaman:</strong> {{ option.amount }}</p>
+              <p><strong>Durasi:</strong> {{ option.duration }}</p>
+              <p class="text-muted">Ajukan pinjaman sesuai kebutuhanmu dengan proses cepat dan aman.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials bg-light p-4 rounded shadow-sm mb-5">
+    <h2 class="mb-4 text-warning"><i class="bi bi-chat-left-quote-fill"></i> Testimoni</h2>
+
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+      <div class="carousel-inner">
+        <div *ngFor="let t of testimonials; let i = index" class="carousel-item" [class.active]="i === 0">
+          <div class="text-center px-5">
+            <h5>{{ t.name }} <small class="text-muted">({{ t.age }} tahun)</small></h5>
+            <blockquote class="blockquote">
+              <p class="mb-2">“{{ t.message }}”</p>
+              <footer class="blockquote-footer">Jumlah Pinjaman: <cite title="Amount">{{ t.amount }}</cite></footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </section>
+
+
+  <!-- Login Button -->
+  <div class="text-center">
+    <a routerLink="/login" class="btn btn-primary btn-lg shadow px-5">
+      <i class="bi bi-box-arrow-in-right me-2"></i>Masuk ke Akun
+    </a>
+  </div>
+
+</div>
