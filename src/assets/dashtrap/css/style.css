@@ -564,7 +564,9 @@ button,
 [type=button],
 [type=reset],
 [type=submit] {
-  -webkit-appearance: button;
+  -webkit-appearance: none;
+  appearance: none;
+
 }
 button:not(:disabled),
 [type=button]:not(:disabled),
@@ -621,7 +623,9 @@ legend + * {
 }
 
 [type=search] {
-  -webkit-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+
   outline-offset: -2px;
 }
 
@@ -648,7 +652,9 @@ legend + * {
 
 ::file-selector-button {
   font: inherit;
-  -webkit-appearance: button;
+  -webkit-appearance: none;
+  appearance: none;
+
 }
 
 output {
@@ -15797,7 +15803,7 @@ html[data-bs-theme=dark] .btn-soft-dark {
   padding: 20px;
   left: 20px !important;
   right: 20px !important;
-  background-image: url("../images/megamenu-bg.png");
+  background-image: url("src/assets/dashtrap/images/background/megamenu-bg.png");
   background-position: right bottom;
   background-repeat: no-repeat;
 }
@@ -17086,7 +17092,8 @@ h6 {
 }
 
 .apexcharts-tooltip.apexcharts-theme-dark * {
-  color: #fff !important;
+  background-color: white;
+  color: black !important;
 }
 
 .apexcharts-legend-series {
@@ -18634,7 +18641,7 @@ div.dataTables_scrollBody > table > :not(:first-child) {
 }
 
 .ms-container {
-  background: transparent url("../images/multiple-arrow.png") no-repeat 50% 50%;
+  /* background: transparent url("../images/multiple-arrow.png") no-repeat 50% 50%; */
   width: auto;
   max-width: 370px;
 }
@@ -19062,10 +19069,10 @@ span.flatpickr-weekday,
 
 /*!
  * Waves v0.7.6
- * http://fian.my.id/Waves 
- * 
- * Copyright 2014-2018 Alfiana E. Sibuea and other contributors 
- * Released under the MIT license 
+ * http://fian.my.id/Waves
+ *
+ * Copyright 2014-2018 Alfiana E. Sibuea and other contributors
+ * Released under the MIT license
  * https://github.com/fians/Waves/blob/master/LICENSE */
 .waves-effect {
   position: relative;

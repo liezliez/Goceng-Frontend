@@ -33,7 +33,10 @@
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "src/assets/dashtrap/js/main.js"
+              "src/assets/dashtrap/js/vendor.min.js",
+              "src/assets/dashtrap/js/config.js",
+              "src/assets/dashtrap/js/app.js"
+
             ]
 
           },
