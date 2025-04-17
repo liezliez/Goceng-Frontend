@@ -1,21 +1,21 @@
 <!-- dashboard.component.html -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/">Goceng</a>
 
-    <div class="d-flex ms-auto">
-      <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
-    </div>
+<header class="dashtrap-header navbar-style-1 shadow-sm">
+  <div class="container-fluid d-flex justify-content-between align-items-center px-4">
+    <a class="navbar-brand fw-bold fs-4 text-primary" routerLink="/">Goceng</a>
+    <button class="btn btn-danger btn-sm" (click)="logout()">Logout</button>
   </div>
-</nav>
+</header>
 
-<div class="container py-5">
+<section class="section dashboard py-5 px-3">
   <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow rounded-4 p-4">
-        <h2 class="text-center mb-4">Welcome to your Dashboard</h2>
-        <p class="text-center">This is your dashboard. You can view your details and manage your account here.</p>
+    <div class="col-lg-6">
+      <div class="card border-0 shadow rounded-4">
+        <div class="card-body text-center py-5">
+          <h2 class="mb-3 text-primary">Welcome, {{ userName }}!</h2>
+          <p class="text-muted mb-0">This is your dashboard. You can view your details and manage your account here.</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>

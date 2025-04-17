@@ -20,7 +20,9 @@ export class LoginComponent {
   onLogin() {
     this.authService.login(this.authRequest).subscribe({
       next: (res) => {
-        this.authService.setToken(res.token);
+        this.authService.saveUserDetails(res);
+        this.error = ''; // Clear any previous error message
+        console.log('Login successful:', res); // Log the response for debugging
         this.router.navigate(['/dashboard']); // Redirect after login
       },
       error: (err) => {

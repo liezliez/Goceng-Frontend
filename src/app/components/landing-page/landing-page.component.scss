@@ -1,20 +1,11 @@
-@import "bootstrap-icons/font/bootstrap-icons.css";
-
-section {
-  margin-bottom: 2rem;
-}
-
-.stats, .loan-options, .testimonials {
-  background-color: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 10px;
-}
-
-.testimonial {
-  border-bottom: 1px solid #ccc;
-  padding: 1rem 0;
-
-  &:last-child {
-    border-bottom: none;
+.card {
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1.02);
   }
+}
+
+.carousel-item blockquote {
+  font-size: 1.1rem;
+  font-style: italic;
 }

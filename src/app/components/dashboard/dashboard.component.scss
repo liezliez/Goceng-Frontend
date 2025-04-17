@@ -1,4 +1,9 @@
-/* dashboard.component.scss */
-h1 {
-  color: #333;
+:host {
+  .card {
+    background-color: #fff;
+    transition: all 0.3s ease;
+    &:hover {
+      box-shadow: 0 0 0.75rem rgba(0, 0, 0, 0.05);
+    }
+  }
 }

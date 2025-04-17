@@ -1,33 +1,40 @@
-<div class="container mt-5">
+<div class="container py-5">
 
   <!-- Stats Section -->
-  <section class="stats bg-light p-4 rounded shadow-sm mb-5 text-center">
-    <h2 class="mb-4 text-primary"><i class="bi bi-bar-chart-line-fill"></i> Statistik Goceng</h2>
-    <p class="fs-5"><strong>Total Pinjaman:</strong> {{ stats.totalLoanDisbursed }}</p>
-    <p class="fs-5"><strong>Jumlah Download Aplikasi:</strong> {{ stats.appDownloads }}</p>
+  <section class="bg-light p-5 rounded-4 shadow mb-5 text-center border">
+    <h2 class="mb-4 text-primary"><i class="bi bi-bar-chart-line-fill me-2"></i>Statistik Goceng</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <p class="fs-5 mb-2"><strong>Total Pinjaman:</strong> {{ stats.totalLoanDisbursed }}</p>
+        <p class="fs-5"><strong>Jumlah Download Aplikasi:</strong> {{ stats.appDownloads }}</p>
+      </div>
+    </div>
   </section>
 
   <!-- Loan Options Section -->
-  <section class="loan-options bg-white p-4 rounded shadow-sm mb-5">
-    <h2 class="mb-4 text-success"><i class="bi bi-cash-stack"></i> Opsi Pinjaman</h2>
-    <ul class="list-group">
-      <li *ngFor="let option of loanOptions; let i = index"
-          class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-          <strong>{{ option.amount }}</strong>
-          <span class="text-muted">- {{ option.duration }}</span>
+  <section class="bg-white p-5 rounded-4 shadow mb-5 border">
+    <h2 class="mb-4 text-success"><i class="bi bi-cash-stack me-2"></i>Opsi Pinjaman</h2>
+    <div class="row">
+      <div *ngFor="let option of loanOptions; let i = index" class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm border-0 rounded-3">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="card-title mb-1">{{ option.amount }}</h5>
+              <p class="text-muted small mb-0">{{ option.duration }}</p>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" [attr.data-bs-target]="'#loanModal' + i">
+              Detail
+            </button>
+          </div>
         </div>
-        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" [attr.data-bs-target]="'#loanModal' + i">
-          Detail
-        </button>
-      </li>
-    </ul>
+      </div>
+    </div>
 
-    <!-- Modals for each loan option -->
+    <!-- Modals -->
     <ng-container *ngFor="let option of loanOptions; let i = index">
       <div class="modal fade" [id]="'loanModal' + i" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
+          <div class="modal-content rounded-4">
             <div class="modal-header">
               <h5 class="modal-title">Detail Pinjaman</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -44,19 +51,18 @@
   </section>
 
   <!-- Testimonials Section -->
-  <section class="testimonials bg-light p-4 rounded shadow-sm mb-5">
-    <h2 class="mb-4 text-warning"><i class="bi bi-chat-left-quote-fill"></i> Testimoni</h2>
-
-    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
-      <div class="carousel-inner">
+  <section class="bg-light p-5 rounded-4 shadow mb-5 border">
+    <h2 class="mb-4 text-warning"><i class="bi bi-chat-left-quote-fill me-2"></i>Testimoni</h2>
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+      <div class="carousel-inner text-center px-5">
         <div *ngFor="let t of testimonials; let i = index" class="carousel-item" [class.active]="i === 0">
-          <div class="text-center px-5">
-            <h5>{{ t.name }} <small class="text-muted">({{ t.age }} tahun)</small></h5>
-            <blockquote class="blockquote">
-              <p class="mb-2">“{{ t.message }}”</p>
-              <footer class="blockquote-footer">Jumlah Pinjaman: <cite title="Amount">{{ t.amount }}</cite></footer>
-            </blockquote>
-          </div>
+          <h5 class="mb-1">{{ t.name }} <small class="text-muted">({{ t.age }} tahun)</small></h5>
+          <blockquote class="blockquote">
+            <p class="mb-3">“{{ t.message }}”</p>
+            <footer class="blockquote-footer">
+              Jumlah Pinjaman: <cite title="Amount">{{ t.amount }}</cite>
+            </footer>
+          </blockquote>
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
@@ -68,10 +74,9 @@
     </div>
   </section>
 
-
   <!-- Login Button -->
   <div class="text-center">
-    <a routerLink="/login" class="btn btn-primary btn-lg shadow px-5">
+    <a routerLink="/login" class="btn btn-primary btn-lg shadow px-5 py-2 rounded-pill">
       <i class="bi bi-box-arrow-in-right me-2"></i>Masuk ke Akun
     </a>
   </div>
