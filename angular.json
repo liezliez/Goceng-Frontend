@@ -32,10 +32,9 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "src/assets/dashtrap/js/vendor.min.js",
-              "src/assets/dashtrap/js/config.js",
-              "src/assets/dashtrap/js/app.js"
+              "src/assets/dashtrap/libs/jquery/jquery.min.js",
+              "src/assets/dashtrap/libs/jquery-knob/jquery.knob.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
 
             ]
 

@@ -1,21 +1,101 @@
-<!-- dashboard.component.html -->
+<div class="app-wrapper d-flex">
+  <!-- Sidebar -->
+  <aside
+    class="app-sidebar bg-light border-end vh-100"
+    [class.d-none]="!isSidebarOpen && isMobile"
+    [class.collapsed]="isSidebarCollapsed"
+    [class.d-block]="isSidebarOpen || !isMobile"
+  >
+    <div class="sidebar-header d-flex justify-content-between align-items-center px-3 py-2">
+      <a routerLink="/" class="text-primary fw-bold fs-4">Goceng</a>
+      <!-- Sidebar toggle button for mobile -->
+    </div>
+    <ul class="menu-list list-unstyled px-2">
+      <li class="menu-item mb-2">
+        <a routerLink="/dashboard" routerLinkActive="active" class="menu-link d-flex align-items-center">
+          <i class="bi bi-house-door me-2"></i>
+          <span *ngIf="!isSidebarCollapsed">Dashboard</span>
+        </a>
+      </li>
+      <li class="menu-item mb-2">
+        <a routerLink="/profile" routerLinkActive="active" class="menu-link d-flex align-items-center">
+          <i class="bi bi-person me-2"></i>
+          <span *ngIf="!isSidebarCollapsed">Profile</span>
+        </a>
+      </li>
+      <li class="menu-item mb-2">
+        <a routerLink="/management" routerLinkActive="active" class="menu-link d-flex align-items-center">
+          <i class="bi bi-gear me-2"></i>
+          <span *ngIf="!isSidebarCollapsed">Management</span>
+        </a>
+      </li>
+      <li class="menu-item mb-2">
+        <a routerLink="/approval" routerLinkActive="active" class="menu-link d-flex align-items-center">
+          <i class="bi bi-check-square me-2"></i>
+          <span *ngIf="!isSidebarCollapsed">Approval</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
 
-<header class="dashtrap-header navbar-style-1 shadow-sm">
-  <div class="container-fluid d-flex justify-content-between align-items-center px-4">
-    <a class="navbar-brand fw-bold fs-4 text-primary" routerLink="/">Goceng</a>
-    <button class="btn btn-danger btn-sm" (click)="logout()">Logout</button>
-  </div>
-</header>
+  <!-- Main Content -->
+  <main class="app-main-content flex-grow-1" [class.collapsed]="isSidebarCollapsed">
+    <!-- Top Bar -->
+    <header class="app-header navbar-style-1 shadow-sm px-4 py-2 d-flex justify-content-between align-items-center bg-white border-bottom">
+      <div>
+        <button class="btn btn-outline-secondary text-dark" (click)="toggleSidebar()">
+          <i class="bi" [class.bi-list]="!isSidebarCollapsed" [class.bi-x]="isSidebarCollapsed"></i>
+        </button>
+      </div>
+      <div class="d-flex align-items-center">
+        <span class="fw-bold">{{ userName }}</span>
+        <button class="btn btn-danger btn-sm ms-3" (click)="logout()">Logout</button>
+      </div>
+    </header>
 
-<section class="section dashboard py-5 px-3">
-  <div class="row justify-content-center">
-    <div class="col-lg-6">
-      <div class="card border-0 shadow rounded-4">
-        <div class="card-body text-center py-5">
-          <h2 class="mb-3 text-primary">Welcome, {{ userName }}!</h2>
-          <p class="text-muted mb-0">This is your dashboard. You can view your details and manage your account here.</p>
+    <!-- Dashboard Section -->
+    <section class="section dashboard p-4">
+      <!-- Stats Cards -->
+      <div class="row">
+        <div class="col-lg-3 col-md-6 mb-3" *ngFor="let stat of dashboardStats">
+          <div class="card shadow-sm border-0">
+            <div class="card-body text-center">
+              <h5 class="card-title text-muted">{{ stat.title }}</h5>
+              <p class="fs-3" [ngClass]="stat.color">{{ stat.value }}</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+
+      <!-- Additional Dashboard Info -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card shadow-sm border-0">
+            <div class="card-body">
+              <h5 class="card-title text-muted">Recent Applications</h5>
+              <p class="text-muted">Here you can show a table or list of the most recent loan applications.</p>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Customer</th>
+                    <th>Loan Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let app of recentApplications; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ app.customer }}</td>
+                    <td>{{ app.loanAmount }}</td>
+                    <td>{{ app.status }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
