@@ -9,7 +9,10 @@ export interface AuthRequest {
 
 export interface AuthResponse {
   token: string;
-  username: string; // 💖 Includes the username from backend
+  refreshToken: string;
+  username: string;
+  expiresAt: number;
+  features: string[];
 }
 
 @Injectable({
@@ -30,11 +33,13 @@ export class AuthService {
   }
 
   /**
-   * 💾 Save token and username to localStorage.
+   * 💾 Save token, username, and features to localStorage.
    */
   saveUserDetails(authResponse: AuthResponse): void {
     localStorage.setItem('token', authResponse.token);
+    localStorage.setItem('refreshToken', authResponse.refreshToken);
     localStorage.setItem('username', authResponse.username);
+    localStorage.setItem('features', JSON.stringify(authResponse.features));
   }
 
   /**
@@ -43,28 +48,33 @@ export class AuthService {
   logout(): void {
     const token = this.getToken();
 
-    if (token) {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`
-      });
-
-      this.http.post(`${this.baseUrl}/logout`, {}, {
-        headers,
-        withCredentials: true,
-        responseType: 'text'
-      }).subscribe({
-        next: () => {
-          console.log('Token blacklisted successfully.');
-          this.clearStorage();
-        },
-        error: err => {
-          console.error('Logout error:', err);
-          this.clearStorage();
-        }
-      });
-    } else {
+    if (!token) {
       this.clearStorage();
+      return;
     }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    this.http.post(`${this.baseUrl}/logout`, {}, {
+      headers,
+      withCredentials: true,
+      responseType: 'text'
+    }).subscribe({
+      next: () => {
+        console.log('🔒 Token blacklisted successfully.');
+        this.clearStorage();
+      },
+      error: err => {
+        if (err.status === 401) {
+          console.warn('⚠️ Token already invalid or expired. Proceeding with logout.');
+        } else {
+          console.error('🚫 Logout error:', err);
+        }
+        this.clearStorage();
+      }
+    });
   }
 
   /**
@@ -72,7 +82,9 @@ export class AuthService {
    */
   private clearStorage(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('username');
+    localStorage.removeItem('features');
   }
 
   /**
@@ -90,9 +102,42 @@ export class AuthService {
   }
 
   /**
+   * 📜 Get user features from localStorage.
+   */
+  getUserFeatures(): string[] {
+    const features = localStorage.getItem('features');
+    return features ? JSON.parse(features) : [];
+  }
+
+  /**
    * ✅ Check if user is logged in.
    */
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  /**
+   * 🔍 Decode JWT payload
+   */
+  private decodeToken(): any | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      return JSON.parse(decodedPayload);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 🎭 Get user role from token
+   */
+  getUserRole(): string | null {
+    const payloadJson = this.decodeToken();
+    return payloadJson?.role || null;
   }
 }

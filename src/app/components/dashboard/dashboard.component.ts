@@ -1,17 +1,26 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { FEATURE_BASED_MENU, MenuItem } from '../constants/menu/feature-menu';
+
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  // Dashboard stats array to display in the template
+  userName: string = 'User';
+  userRole: string = 'Unknown Role';
+  menuItems: MenuItem[] = [];
+
+  isSidebarOpen: boolean = true;
+  isSidebarCollapsed: boolean = false;
+  isMobile: boolean = false;
+
   dashboardStats = [
     { title: 'Total Applications', value: 150, icon: 'bi-house-door', color: 'text-primary' },
     { title: 'Total Loans', value: 120, icon: 'bi-gear', color: 'text-success' },
@@ -19,13 +28,6 @@ export class DashboardComponent implements OnInit {
     { title: 'Completed Repayments', value: 75, icon: 'bi-graph-up', color: 'text-info' }
   ];
 
-  // User and sidebar properties
-  userName: string | undefined;
-  isSidebarOpen: boolean = true;
-  isSidebarCollapsed: boolean = false;
-  isMobile: boolean = false;
-
-  // Recent applications
   recentApplications = [
     { id: 1, customer: 'John Doe', loanAmount: 5000, status: 'Approved' },
     { id: 2, customer: 'Jane Smith', loanAmount: 3000, status: 'Pending' }
@@ -37,9 +39,24 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const user = this.authService.getUsername();
-    this.userName = user ?? undefined;
+    // 🧑‍💼 Load user info
+    this.userName = this.authService.getUsername() ?? 'User';
+    this.userRole = this.authService.getUserRole() ?? 'Unknown Role';
+
+    // 📱 Adjust UI based on screen size
     this.checkScreenSize();
+
+    // 🧩 Build menu based on available features
+    const userFeatures = this.authService.getUserFeatures();
+    this.menuItems = FEATURE_BASED_MENU
+      .filter(item => userFeatures.includes(item.feature))
+      .map(item => ({
+        ...item,
+        expanded: false, // Ensure expanded state is initially set
+        children: item.children?.filter(child => userFeatures.includes(child.feature)) ?? []
+      }));
+
+    console.log(userFeatures); // Debugging line
   }
 
   @HostListener('window:resize', [])
@@ -47,38 +64,57 @@ export class DashboardComponent implements OnInit {
     this.checkScreenSize();
   }
 
-  // Check if the screen size is mobile or not
   checkScreenSize(): void {
-    this.isMobile = window.innerWidth < 992;
+    const width = window.innerWidth;
+    this.isMobile = width < 992;
+
     if (this.isMobile) {
-      this.isSidebarOpen = false; // Collapse sidebar on mobile
+      this.isSidebarOpen = false;
+      this.isSidebarCollapsed = false;
+    } else {
+      this.isSidebarOpen = true;
     }
   }
 
-  // Toggle sidebar state based on device type (mobile vs desktop)
   toggleSidebar(): void {
     if (this.isMobile) {
-      this.isSidebarOpen = !this.isSidebarOpen;  // Toggle open/close on mobile
+      this.isSidebarOpen = !this.isSidebarOpen;
     } else {
-      this.isSidebarCollapsed = !this.isSidebarCollapsed;  // Collapse/Expand on desktop
+      this.isSidebarCollapsed = !this.isSidebarCollapsed;
     }
   }
 
-  // Method to collapse/expand the sidebar on desktop
-  toggleSidebarCollapse(): void {
-    if (!this.isMobile) {
-      this.isSidebarCollapsed = !this.isSidebarCollapsed; // Toggle collapse on desktop
+  closeSidebar(): void {
+    if (this.isMobile) {
+      this.isSidebarOpen = false;
     }
   }
 
-  // Logout user and navigate to login page
+  // Toggle submenu visibility for the provided menu item
+  toggleSubMenu(item: any): void {
+    // Collapse all other open menus if needed
+    this.menuItems.forEach(i => {
+      if (i !== item) {
+        i.expanded = false;
+      }
+    });
+
+    // Toggle selected
+    item.expanded = !item.expanded;
+  }
+
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
-  // Close the sidebar explicitly
-  closeSidebar(): void {
-    this.isSidebarOpen = false;
+  formatRole(role: string): string {
+    if (!role) return '';
+    return role
+      .replace('ROLE_', '')
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, char => char.toUpperCase());
   }
 }

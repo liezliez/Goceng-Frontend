@@ -15,6 +15,7 @@ export class AppComponent {
   constructor(private router: Router) {}
 
   isHomePage(): boolean {
+    // Check if the current route is the homepage ('/' or '/home')
     const currentUrl = this.router.url;
     return currentUrl === '/' || currentUrl === '/home';
   }
