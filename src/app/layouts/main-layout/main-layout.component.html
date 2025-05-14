@@ -1,0 +1,83 @@
+<div class="app-wrapper d-flex">
+  <!-- Sidebar Backdrop for Mobile -->
+  <div
+    class="sidebar-backdrop"
+    *ngIf="isMobile && isSidebarOpen"
+    (click)="closeSidebar()"
+  ></div>
+
+  <!-- Sidebar -->
+  <aside
+    class="app-sidebar bg-white border-end shadow-sm"
+    [class.collapsed]="isSidebarCollapsed && !isMobile"
+    [class.open]="isSidebarOpen || !isMobile"
+    role="navigation"
+  >
+    <!-- Sidebar Header -->
+    <div class="sidebar-header px-3 py-3">
+      <img
+        src="assets/dashtrap/images/logo/Logo-caption-web.png"
+        alt="Goceng Logo"
+        class="w-100 img-fluid"
+        style="object-fit: contain;"
+      />
+    </div>
+
+    <!-- Sidebar Menu -->
+    <ul class="menu-list list-unstyled px-2">
+      <li class="menu-item mb-2">
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="active"
+          class="menu-link d-flex align-items-center px-2 py-2 rounded text-dark text-decoration-none"
+        >
+          <i class="bi bi-speedometer2 me-2"></i>
+          <span *ngIf="!isSidebarCollapsed || isMobile">Dashboard</span>
+        </a>
+      </li>
+      <li class="menu-item mb-2">
+        <a
+          routerLink="/users"
+          routerLinkActive="active"
+          class="menu-link d-flex align-items-center px-2 py-2 rounded text-dark text-decoration-none"
+        >
+          <i class="bi bi-people me-2"></i>
+          <span *ngIf="!isSidebarCollapsed || isMobile">User Management</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="app-main-content flex-grow-1" [class.collapsed]="isSidebarCollapsed && !isMobile">
+    <!-- Topbar -->
+    <header class="app-header shadow-sm px-4 py-3 d-flex justify-content-between align-items-center bg-white border-bottom">
+      <button
+        class="btn btn-outline-secondary"
+        (click)="toggleSidebar()"
+        aria-label="Toggle sidebar"
+      >
+        <i
+          class="bi"
+          [ngClass]="{
+            'bi-list': !isSidebarCollapsed || isMobile,
+            'bi-x': isSidebarCollapsed && !isMobile
+          }"
+        ></i>
+      </button>
+
+      <div class="d-flex align-items-center">
+        <div class="text-end me-3">
+          <div class="fw-semibold text-dark">Welcome, {{ userName }}</div>
+          <div class="small text-muted">{{ formatRole(userRole) }}</div>
+        </div>
+        <button class="btn btn-sm btn-outline-danger" (click)="logout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- Routed Page Content -->
+    <section class="p-4">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,50 @@
+<ng-container *ngIf="isHomePage(); else routedContent">
+  <main class="container-fluid py-5 bg-light min-vh-100 d-flex align-items-center">
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+
+        <!-- Left Side: Logo and Tagline -->
+        <div class="col-lg-6 mb-5 mb-lg-0 text-center text-lg-start">
+          <div class="d-flex align-items-center justify-content-center justify-content-lg-start mb-4">
+            <img src="../assets/Logo.png" alt="Goceng Logo" style="height: 130px;"/>
+            <h1 class="display-4 fw-bold mb-0">
+              Welcome to <span class="text-primary">Goceng</span>
+            </h1>
+          </div>
+          <p class="fs-5 text-muted">Your trusted lending partner — Great Option dan pastinya cengli!</p>
+        </div>
+
+        <!-- Right Side: Call to Action -->
+        <div class="col-lg-5">
+          <div class="p-4 p-lg-5 bg-white shadow rounded-4">
+            <h2 class="mb-4 fw-semibold text-center">Get Started Now</h2>
+            <p class="text-center text-muted mb-4">Apply for loans quickly and securely.</p>
+
+            <div class="d-grid gap-3">
+              <a routerLink="/signup" class="btn btn-success btn-lg shadow-sm">Sign Up</a>
+              <a routerLink="/login" class="btn btn-primary btn-lg shadow-sm">Login</a>
+              <a routerLink="/learn-more" class="btn btn-outline-secondary btn-lg shadow-sm">Learn More</a>
+            </div>
+
+            <div class="text-center mt-4">
+              <span class="text-muted">Follow us:</span>
+              <div class="mt-2">
+                <a href="https://twitter.com" target="_blank" rel="noopener" class="text-primary me-3 fs-4">
+                  <i class="bi bi-twitter" aria-label="Twitter"></i>
+                </a>
+                <a href="https://facebook.com" target="_blank" rel="noopener" class="text-primary fs-4">
+                  <i class="bi bi-facebook" aria-label="Facebook"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</ng-container>
+
+<ng-template #routedContent>
+  <router-outlet></router-outlet>
+</ng-template>

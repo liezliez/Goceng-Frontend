@@ -1,0 +1,33 @@
+<!-- Dashboard Wrapper: No background color -->
+<div class="dashboard-background min-vh-100 d-flex align-items-center justify-content-center py-5">
+  <!-- Dashboard Container -->
+  <div class="dashboard-container container px-3">
+    <!-- Card -->
+    <div class="card shadow rounded-4 border-0">
+      <div class="card-body px-4 py-5">
+
+        <!-- Welcome Section -->
+        <section class="welcome-section text-center mb-5">
+          <img
+            src="assets/dashtrap/images/logo/Logo-caption-web.png"
+            alt="Goceng Logo"
+            class="img-fluid mb-4"
+            style="max-height: 240px;"
+          />
+          <h1 class="display-6 fw-semibold">Welcome to Goceng Dashboard</h1>
+          <p class="lead text-muted">We’re excited to have you onboard 🚀</p>
+        </section>
+
+        <!-- News Section -->
+        <section class="news-section">
+          <h2 class="h4 fw-bold mb-4 text-primary">Latest News</h2>
+          <div *ngFor="let newsItem of news" class="news-item mb-3 p-3 rounded-3 shadow-sm" style="background-color: #f9f9f9;">
+            <h5 class="mb-1">{{ newsItem.title }}</h5>
+            <p class="mb-0 text-muted">{{ newsItem.description }}</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</div>
