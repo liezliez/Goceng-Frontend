@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { UserService } from '../../../services/user.service';
-import { TemplateRef } from '@angular/core';
 import { User } from '../../../models/user.model';
-import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClient } from '@angular/common/http';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-user-management',
@@ -18,20 +17,19 @@ export class UserManagementComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
   userEditForm: FormGroup;
-  roles: { id: string; name: string }[] = [];
+  roles: { id: string; roleName: string }[] = [];
+  loading = false;
 
   constructor(
     private userService: UserService,
-    private http: HttpClient,
     private modalService: NgbModal,
     private fb: FormBuilder
   ) {
     this.userEditForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: [''],
       accountStatus: ['ACTIVE', Validators.required],
-      idRole: ['', Validators.required]
+      idRole: ['', Validators.required],
     });
   }
 
@@ -41,111 +39,125 @@ export class UserManagementComponent implements OnInit {
   }
 
   loadUsers(): void {
+    this.loading = true;
     this.userService.getAllUsers().subscribe({
-      next: (data: User[]) => this.users = data,
-      error: (err) => console.error('Error fetching users', err)
+      next: (data: User[]) => {
+        this.users = data;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error fetching users', err);
+        alert('Failed to load users.');
+        this.loading = false;
+      }
     });
   }
 
   loadRoles(): void {
     this.userService.getAllRoles().subscribe({
-      next: (roles) => {
+      next: roles => {
         this.roles = roles.map(role => ({
-          id: role.id,
-          name: role.roleName
+          id: String(role.id),
+          roleName: role.roleName
         }));
       },
-      error: (err) => console.error('Error fetching roles', err)
+      error: err => {
+        console.error('Error fetching roles', err);
+        alert('Failed to load roles.');
+      }
     });
   }
 
   openEditModal(modal: TemplateRef<any>, user: User): void {
-    this.selectedUser = user;
+    this.userService.getUserById(user.id).subscribe({
+      next: (userData) => {
+        this.selectedUser = userData;
+        this.userEditForm.patchValue({
+          name: userData.name,
+          email: userData.email,
+          accountStatus: userData.account_status ?? 'ACTIVE',
+          idRole: userData.role ? String(userData.role.id) : '',
+        });
 
-    this.userEditForm.patchValue({
-      name: user.name,
-      email: user.email,
-      password: '',
-      accountStatus: user.accountStatus,
-      idRole: user.role?.idRole || ''
+        this.modalService.open(modal, { centered: true });
+      },
+      error: (err) => {
+        console.error('Failed to load user details', err);
+        alert('Failed to load user details for editing.');
+      }
     });
-
-    this.modalService.open(modal, { centered: true });
-  }
-
-  openCreateModal(modal: TemplateRef<any>): void {
-    this.selectedUser = null;
-    this.userEditForm.reset({
-      name: '',
-      email: '',
-      password: '',
-      accountStatus: 'ACTIVE',
-      idRole: ''
-    });
-    this.modalService.open(modal, { centered: true });
   }
 
   closeModal(): void {
     this.modalService.dismissAll();
   }
 
-  onRoleChange(event: any): void {
-    const selectedRole = event.target.value;
-    console.log('Selected role:', selectedRole);
-  }
-
   saveUserEdits(): void {
     if (this.userEditForm.invalid) {
-      alert('Please complete all required fields.');
+      alert('Please fill all required fields correctly.');
       return;
     }
 
-    const formValue = this.userEditForm.value;
+    const formValue = this.userEditForm.getRawValue();
+
     const payload: any = {
       name: formValue.name,
       email: formValue.email,
-      accountStatus: formValue.accountStatus,
-      role: { id: formValue.idRole }
+      account_status: formValue.accountStatus,
+      idRole: Number(formValue.idRole),
     };
 
-    if (formValue.password?.trim()) {
-      payload.password = formValue.password;
-    }
-
     if (this.selectedUser) {
-      this.userService.editUser(this.selectedUser.idUser, payload).subscribe({
+      this.loading = true;
+      this.userService.editUser(this.selectedUser.id, payload).subscribe({
         next: () => {
           alert('User updated successfully!');
           this.userEditForm.reset();
           this.selectedUser = null;
-          this.modalService.dismissAll();
           this.loadUsers();
+          this.modalService.dismissAll();
+          this.loading = false;
         },
-        error: (error) => {
-          console.error('Error updating user', error);
+        error: (err) => {
+          console.error('Error updating user', err);
           alert('Failed to update user.');
+          this.loading = false;
         }
       });
     } else {
-      // Optional: You can handle user creation here
-      alert('User creation not implemented yet.');
+      alert('No user selected for editing.');
     }
   }
 
   softDeleteUser(userId: string): void {
     if (confirm('Are you sure you want to delete this user?')) {
       this.userService.softDeleteUser(userId).subscribe({
-        next: () => this.loadUsers(),
-        error: (err) => console.error('Error deleting user', err)
+        next: (res) => {
+          alert(res);
+          this.loadUsers();
+        },
+        error: err => {
+          console.error('Error deleting user', err);
+          alert('Failed to delete user.');
+        }
       });
     }
   }
 
   restoreUser(userId: string): void {
     if (confirm('Are you sure you want to restore this user?')) {
+      this.loading = true;
       this.userService.restoreUser(userId).subscribe({
-        next: () => this.loadUsers(),
-        error: (err) => console.error('Error restoring user', err)
+        next: (res) => {
+          alert(res);
+          this.loadUsers();
+          this.loading = false;
+        },
+        error: err => {
+          console.error('Error restoring user', err);
+          alert('Failed to restore user.');
+          this.loading = false;
+        }
       });
     }
   }

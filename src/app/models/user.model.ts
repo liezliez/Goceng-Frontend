@@ -1,21 +1,22 @@
-// src/app/models/user.model.ts
-
 export interface User {
-  idUser: string;          // UUID
-  name: string;            // User's full name
-  email: string;           // User's email address
-  password?: string;       // Password is optional for some operations (e.g., when creating or editing)
-  accountStatus: string;   // Active, Banned, etc. (enum)
-  role: {
-    idRole: string;        // Role ID
-    roleName: string;      // Role name (e.g., 'ADMIN', 'USER', etc.)
+  id: string;               // matches backend `id`
+  name: string;
+  email: string;
+  account_status: string;   // matches backend field name exactly
+  role?: {
+    id: number | string;    // matches backend `role.id`
+    roleName: string;       // role display name
   };
   branch?: {
-    idBranch: string;      // Optional branch ID (can be null)
-    branchName: string;    // Optional branch name (if available)
+    id: string;             // matches backend `branch.id`
+    name: string;           // branch name
   };
   employee?: {
-    idEmployee: string;    // Optional employee ID
-    employeeName: string;  // Optional employee name
-  };
+    id: string;             // matches backend `employee.id`
+    name: string;           // employee name
+  } | null;
+}
+export interface UserRole {
+  id: number;
+  roleName: string;
 }

@@ -7,7 +7,6 @@
         <div class="user-management-container">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold mb-0">User Management</h2>
-            <!-- <button class="btn btn-primary rounded-pill px-4 py-2" (click)="addUser()">Add User</button> -->
           </div>
 
           <div class="table-responsive">
@@ -24,19 +23,19 @@
               </thead>
               <tbody>
                 <tr *ngFor="let user of users">
-                  <td>{{ user.idUser }}</td>
+                  <td>{{ user.id }}</td>
                   <td>{{ user.name }}</td>
                   <td>{{ user.email }}</td>
-                  <td>{{ user.role.roleName }}</td>
-                  <td>{{ user.accountStatus }}</td>
+                  <td>{{ user.role?.roleName || 'N/A' }}</td>
+                  <td>{{ user.account_status }}</td>
                   <td>
                     <button class="btn btn-warning btn-sm rounded-pill me-2 px-3 py-1" (click)="openEditModal(editModal, user)">
                       <i class="bi bi-pencil-fill"></i> Edit
                     </button>
-                    <button *ngIf="user.accountStatus === 'ACTIVE'" class="btn btn-danger btn-sm rounded-pill px-3 py-1" (click)="softDeleteUser(user.idUser)">
+                    <button *ngIf="user.account_status === 'ACTIVE'" class="btn btn-danger btn-sm rounded-pill px-3 py-1" (click)="softDeleteUser(user.id)">
                       <i class="bi bi-trash-fill"></i> Delete
                     </button>
-                    <button *ngIf="user.accountStatus === 'DELETED'" class="btn btn-success btn-sm rounded-pill px-3 py-1" (click)="restoreUser(user.idUser)">
+                    <button *ngIf="user.account_status === 'DELETED'" class="btn btn-success btn-sm rounded-pill px-3 py-1" (click)="restoreUser(user.id)">
                       <i class="bi bi-arrow-repeat"></i> Restore
                     </button>
                   </td>
@@ -67,10 +66,7 @@
           <label for="email" class="form-label">Email</label>
           <input id="email" formControlName="email" class="form-control" type="email" required />
         </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password (leave empty to keep current)</label>
-          <input id="password" formControlName="password" class="form-control" type="password" />
-        </div>
+
         <div class="mb-3">
           <label for="accountStatus" class="form-label">Status</label>
           <select id="accountStatus" formControlName="accountStatus" class="form-select">
@@ -78,10 +74,12 @@
             <option value="DELETED">Deleted</option>
           </select>
         </div>
+
         <div class="mb-3">
           <label for="role" class="form-label">Role</label>
           <select id="role" formControlName="idRole" class="form-select">
-            <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+            <option value="" disabled>Select Role</option>
+            <option *ngFor="let role of roles" [value]="role.id">{{ role.roleName }}</option>
           </select>
         </div>
       </form>
