@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { User } from '../models/user.model';  // Make sure the path is correct
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,26 +11,13 @@ import { User } from '../models/user.model';  // Make sure the path is correct
 export class UserService {
   private readonly baseUrl = `${environment.apiUrl}/users`;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      this.router.navigate(['/login']);
-    }
-    return new HttpHeaders({ Authorization: `Bearer ${token ?? ''}` });
-  }
+  constructor(private http: HttpClient) {}
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/list`, {
-      headers: this.getAuthHeaders()
-    }).pipe(
+    return this.http.get<User[]>(`${this.baseUrl}/list`).pipe(
       map(users => users.map(u => ({
         ...u,
-        id: u.id,  // use id as returned by API
+        id: u.id,  // Use id as returned by API
         account_status: u.account_status || 'N/A',
         role: u.role ? {
           id: u.role.id,
@@ -50,48 +36,38 @@ export class UserService {
   }
 
   getUserById(id: string): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/id/${id}`, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.get<User>(`${this.baseUrl}/id/${id}`);
   }
 
   getUserByEmail(email: string): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/email`, {
-      headers: this.getAuthHeaders(),
       params: { email }
     });
   }
 
   softDeleteUser(userId: string): Observable<string> {
     return this.http.put(`${this.baseUrl}/id/${userId}/delete`, {}, {
-      headers: this.getAuthHeaders(),
       responseType: 'text'
     });
   }
 
   restoreUser(userId: string): Observable<string> {
     return this.http.put(`${this.baseUrl}/id/${userId}/restore`, {}, {
-      headers: this.getAuthHeaders(),
       responseType: 'text'
     });
   }
 
   editUser(userId: string, userData: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/id/${userId}/edit`, userData, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.put(`${this.baseUrl}/id/${userId}/edit`, userData);
   }
 
   createUser(userData: any, branchId: string): Observable<any> {
     return this.http.post(`${this.baseUrl}`, userData, {
-      headers: this.getAuthHeaders(),
       params: { branchId }
     });
   }
 
   getAllRoles(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/roles`, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.get<any[]>(`${environment.apiUrl}/roles`);
   }
 }

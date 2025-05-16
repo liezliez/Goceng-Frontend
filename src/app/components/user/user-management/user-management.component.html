@@ -76,12 +76,28 @@
         </div>
 
         <div class="mb-3">
-          <label for="role" class="form-label">Role</label>
-          <select id="role" formControlName="idRole" class="form-select">
-            <option value="" disabled>Select Role</option>
-            <option *ngFor="let role of roles" [value]="role.id">{{ role.roleName }}</option>
-          </select>
+          <label class="form-label d-block">Role</label>
+          <div *ngFor="let role of roles" class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              [id]="'role_' + role.id"
+              [value]="role.id"
+              formControlName="idRole"
+              name="idRole"
+            />
+            <label class="form-check-label" [for]="'role_' + role.id">
+              {{ role.roleName }}
+            </label>
+          </div>
+          <div *ngIf="userEditForm.get('idRole')?.invalid && userEditForm.get('idRole')?.touched" class="text-danger small">
+            Please select a role.
+          </div>
         </div>
+        
+        
+        
+        
       </form>
     </div>
     <div class="modal-footer">

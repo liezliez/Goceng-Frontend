@@ -50,19 +50,12 @@ export class AuthService {
   }
 
   logout(): void {
-    const token = this.getToken();
-
-    if (!token) {
+    if (!this.getToken()) {
       this.clearStorage();
       return;
     }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
+  
     this.http.post(`${this.baseUrl}/logout`, {}, {
-      headers,
       withCredentials: true,
       responseType: 'text'
     }).subscribe({
@@ -80,6 +73,7 @@ export class AuthService {
       }
     });
   }
+  
 
   private clearStorage(): void {
     Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
@@ -101,6 +95,24 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
+
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) return true;
+  
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const expiry = payload.exp;
+      if (!expiry) return true;
+  
+      const now = Math.floor(Date.now() / 1000);
+      return now > expiry;
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      return true;
+    }
+  }
+  
 
   private decodeToken(): Record<string, any> | null {
     const token = this.getToken();

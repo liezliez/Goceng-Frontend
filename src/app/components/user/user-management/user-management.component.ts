@@ -17,7 +17,7 @@ export class UserManagementComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
   userEditForm: FormGroup;
-  roles: { id: string; roleName: string }[] = [];
+  roles: { id: number; roleName: string }[] = [];
   loading = false;
 
   constructor(
@@ -28,15 +28,20 @@ export class UserManagementComponent implements OnInit {
     this.userEditForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      accountStatus: ['ACTIVE', Validators.required],
-      idRole: ['', Validators.required],
+      accountStatus: ['', Validators.required],
+      idRole: ['', Validators.required]  // role ID, number
     });
   }
 
   ngOnInit(): void {
     this.loadUsers();
     this.loadRoles();
+  
+    this.userEditForm.get('idRole')?.valueChanges.subscribe(value => {
+      console.log('Role dropdown changed to:', value);
+    });
   }
+  
 
   loadUsers(): void {
     this.loading = true;
@@ -55,11 +60,14 @@ export class UserManagementComponent implements OnInit {
 
   loadRoles(): void {
     this.userService.getAllRoles().subscribe({
-      next: roles => {
+      next: (roles) => {
         this.roles = roles.map(role => ({
-          id: String(role.id),
+          id: role.id,
           roleName: role.roleName
         }));
+        if (this.selectedUser) {
+          this.patchForm(this.selectedUser);
+        }
       },
       error: err => {
         console.error('Error fetching roles', err);
@@ -72,19 +80,26 @@ export class UserManagementComponent implements OnInit {
     this.userService.getUserById(user.id).subscribe({
       next: (userData) => {
         this.selectedUser = userData;
-        this.userEditForm.patchValue({
-          name: userData.name,
-          email: userData.email,
-          accountStatus: userData.account_status ?? 'ACTIVE',
-          idRole: userData.role ? String(userData.role.id) : '',
-        });
-
+        if (this.roles.length > 0) {
+          this.patchForm(userData);
+        } else {
+          this.loadRoles();  // roles will patch form after loaded
+        }
         this.modalService.open(modal, { centered: true });
       },
       error: (err) => {
         console.error('Failed to load user details', err);
         alert('Failed to load user details for editing.');
       }
+    });
+  }
+
+  patchForm(userData: User): void {
+    this.userEditForm.patchValue({
+      name: userData.name,
+      email: userData.email,
+      accountStatus: userData.account_status,
+      idRole: userData.role?.id ? String(userData.role.id) : '',
     });
   }
 
@@ -97,16 +112,21 @@ export class UserManagementComponent implements OnInit {
       alert('Please fill all required fields correctly.');
       return;
     }
-
+  
     const formValue = this.userEditForm.getRawValue();
-
-    const payload: any = {
+  
+    console.log('Form raw values:', formValue);
+    console.log('idRole as number:', Number(formValue.idRole));
+  
+    const payload = {
       name: formValue.name,
       email: formValue.email,
       account_status: formValue.accountStatus,
-      idRole: Number(formValue.idRole),
+      idRole: Number(formValue.idRole),  // convert string to number explicitly
     };
-
+  
+    console.log('Payload to send:', payload);
+  
     if (this.selectedUser) {
       this.loading = true;
       this.userService.editUser(this.selectedUser.id, payload).subscribe({
@@ -128,6 +148,7 @@ export class UserManagementComponent implements OnInit {
       alert('No user selected for editing.');
     }
   }
+  
 
   softDeleteUser(userId: string): void {
     if (confirm('Are you sure you want to delete this user?')) {
