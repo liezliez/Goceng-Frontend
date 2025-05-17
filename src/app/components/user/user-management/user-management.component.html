@@ -21,27 +21,51 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr *ngFor="let user of users">
-                  <td>{{ user.id }}</td>
-                  <td>{{ user.name }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.role?.roleName || 'N/A' }}</td>
-                  <td>{{ user.account_status }}</td>
-                  <td>
-                    <button class="btn btn-warning btn-sm rounded-pill me-2 px-3 py-1" (click)="openEditModal(editModal, user)">
-                      <i class="bi bi-pencil-fill"></i> Edit
-                    </button>
-                    <button *ngIf="user.account_status === 'ACTIVE'" class="btn btn-danger btn-sm rounded-pill px-3 py-1" (click)="softDeleteUser(user.id)">
-                      <i class="bi bi-trash-fill"></i> Delete
-                    </button>
-                    <button *ngIf="user.account_status === 'DELETED'" class="btn btn-success btn-sm rounded-pill px-3 py-1" (click)="restoreUser(user.id)">
-                      <i class="bi bi-arrow-repeat"></i> Restore
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
+              <!-- User Table -->
+                <tbody>
+                  <tr *ngFor="let user of paginatedUsers">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role?.roleName || 'N/A' }}</td>
+                    <td>{{ user.account_status }}</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm rounded-pill me-2 px-3 py-1" (click)="openEditModal(editModal, user)">
+                        <i class="bi bi-pencil-fill"></i> Edit
+                      </button>
+                      <button *ngIf="user.account_status === 'ACTIVE'" class="btn btn-danger btn-sm rounded-pill px-3 py-1" (click)="softDeleteUser(user.id)">
+                        <i class="bi bi-trash-fill"></i> Delete
+                      </button>
+                      <button *ngIf="user.account_status === 'DELETED'" class="btn btn-success btn-sm rounded-pill px-3 py-1" (click)="restoreUser(user.id)">
+                        <i class="bi bi-arrow-repeat"></i> Restore
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+
             </table>
+
+            
+            <nav class="mt-3">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <button class="page-link" (click)="changePage(currentPage - 1)">Previous</button>
+                </li>
+            
+                <li class="page-item"
+                    *ngFor="let page of [].constructor(totalPages()); let i = index"
+                    [class.active]="currentPage === i + 1">
+                  <button class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</button>
+                </li>
+            
+                <li class="page-item" [class.disabled]="currentPage === totalPages()">
+                  <button class="page-link" (click)="changePage(currentPage + 1)">Next</button>
+                </li>
+              </ul>
+            </nav>
+            
+
+
           </div>
         </div>
       </div>

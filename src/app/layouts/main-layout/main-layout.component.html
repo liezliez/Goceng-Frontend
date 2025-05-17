@@ -1,57 +1,75 @@
 <div class="app-wrapper d-flex">
-  <!-- Sidebar Backdrop for Mobile -->
   <div
     class="sidebar-backdrop"
     *ngIf="isMobile && isSidebarOpen"
     (click)="closeSidebar()"
   ></div>
 
-  <!-- Sidebar -->
   <aside
     class="app-sidebar bg-white border-end shadow-sm"
     [class.collapsed]="isSidebarCollapsed && !isMobile"
     [class.open]="isSidebarOpen || !isMobile"
     role="navigation"
   >
-    <!-- Sidebar Header -->
     <div class="sidebar-header px-3 py-3">
       <img
         src="assets/dashtrap/images/logo/Logo-caption-web.png"
         alt="Goceng Logo"
         class="w-100 img-fluid"
-        style="object-fit: contain;"
+        style="object-fit: contain"
       />
     </div>
 
-    <!-- Sidebar Menu -->
     <ul class="menu-list list-unstyled px-2">
-      <li class="menu-item mb-2">
+      <li
+        class="menu-item mb-2"
+        *ngFor="let item of menuItems"
+        [class.has-children]="item.children?.length"
+      >
         <a
-          routerLink="/dashboard"
+          [routerLink]="item.route"
           routerLinkActive="active"
           class="menu-link d-flex align-items-center px-2 py-2 rounded text-dark text-decoration-none"
+          (click)="item.children?.length ? toggleSubMenu(item) : closeSidebar()"
+          [attr.aria-expanded]="item.expanded ? 'true' : 'false'"
+          href="javascript:void(0)"
         >
-          <i class="bi bi-speedometer2 me-2"></i>
-          <span *ngIf="!isSidebarCollapsed || isMobile">Dashboard</span>
+          <i class="bi me-2" [ngClass]="item.icon"></i>
+          <span *ngIf="!isSidebarCollapsed || isMobile">{{ item.label }}</span>
+          <i
+            *ngIf="item.children?.length"
+            class="ms-auto bi"
+            [ngClass]="item.expanded ? 'bi-chevron-up' : 'bi-chevron-down'"
+          ></i>
         </a>
-      </li>
-      <li class="menu-item mb-2">
-        <a
-          routerLink="/users"
-          routerLinkActive="active"
-          class="menu-link d-flex align-items-center px-2 py-2 rounded text-dark text-decoration-none"
+
+        <ul
+          *ngIf="item.children?.length && item.expanded"
+          class="submenu list-unstyled ps-4"
         >
-          <i class="bi bi-people me-2"></i>
-          <span *ngIf="!isSidebarCollapsed || isMobile">User Management</span>
-        </a>
+          <li *ngFor="let child of item.children" class="submenu-item mb-1">
+            <a
+              [routerLink]="child.route"
+              routerLinkActive="active"
+              class="submenu-link d-flex align-items-center px-2 py-1 rounded text-dark text-decoration-none"
+              (click)="closeSidebar()"
+            >
+              <i class="bi me-2" [ngClass]="child.icon"></i>
+              <span>{{ child.label }}</span>
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
   </aside>
 
-  <!-- Main Content -->
-  <main class="app-main-content flex-grow-1" [class.collapsed]="isSidebarCollapsed && !isMobile">
-    <!-- Topbar -->
-    <header class="app-header shadow-sm px-4 py-3 d-flex justify-content-between align-items-center bg-white border-bottom">
+  <main
+    class="app-main-content flex-grow-1"
+    [class.collapsed]="isSidebarCollapsed && !isMobile"
+  >
+    <header
+      class="app-header shadow-sm px-4 py-3 d-flex justify-content-between align-items-center bg-white border-bottom"
+    >
       <button
         class="btn btn-outline-secondary"
         (click)="toggleSidebar()"
@@ -71,11 +89,12 @@
           <div class="fw-semibold text-dark">Welcome, {{ userName }}</div>
           <div class="small text-muted">{{ formatRole(userRole) }}</div>
         </div>
-        <button class="btn btn-sm btn-outline-danger" (click)="logout()">Logout</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="logout()">
+          Logout
+        </button>
       </div>
     </header>
 
-    <!-- Routed Page Content -->
     <section class="p-4">
       <router-outlet></router-outlet>
     </section>

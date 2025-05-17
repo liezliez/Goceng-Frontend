@@ -5,14 +5,11 @@ import { AuthGuard } from './services/auth.guard';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
-  // Redirect base path to login
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // Public routes
   { path: 'login', component: LoginComponent },
-  { path: 'landing', component: LandingPageComponent }, // Optional landing page
+  { path: 'landing', component: LandingPageComponent },
 
-  // Protected routes under main layout
   {
     path: '',
     component: MainLayoutComponent,
@@ -28,9 +25,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/user/user-management/user-management.component').then(m => m.UserManagementComponent),
       },
-    ]
+      {
+        path: 'approval',
+        loadComponent: () =>
+          import('./components/application-approval/application-approval.component').then(m => m.ApplicationApprovalComponent),
+      },
+    ],
   },
 
-  // Wildcard route
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login' },
 ];

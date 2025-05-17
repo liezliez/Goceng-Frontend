@@ -15,8 +15,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
 
   const token = authService.getToken();
 
-  // ✅ If token is expired, clear storage and redirect
-  if (authService.isTokenExpired()) {
+  if (token && authService.isTokenExpired()) {
     authService.logout();
     router.navigate(['/login']);
     return throwError(() => new Error('Token expired'));
@@ -28,7 +27,6 @@ export const AuthInterceptor: HttpInterceptorFn = (
 
   return next(authReq).pipe(
     catchError((err) => {
-      // Optional: Handle 401 responses
       if (err.status === 401) {
         authService.logout();
         router.navigate(['/login']);
@@ -37,3 +35,5 @@ export const AuthInterceptor: HttpInterceptorFn = (
     })
   );
 };
+//         this.clearStorage();
+//         this.router.navigate(['/login']);  

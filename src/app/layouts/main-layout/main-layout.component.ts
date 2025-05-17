@@ -31,10 +31,12 @@ export class MainLayoutComponent implements OnInit {
     this.userName = this.authService.getUsername() ?? 'User';
     this.userRole = this.authService.getUserRole() ?? 'Unknown Role';
     this.formattedRole = this.formatRole(this.userRole);
-
+  
     this.checkScreenSize();
-
+  
     const userFeatures = this.authService.getUserFeatures();
+    console.log('User Features:', userFeatures); // << check what features you have
+  
     this.menuItems = FEATURE_BASED_MENU
       .filter(item => userFeatures.includes(item.feature))
       .map(item => ({
@@ -42,7 +44,11 @@ export class MainLayoutComponent implements OnInit {
         expanded: false,
         children: item.children?.filter(child => userFeatures.includes(child.feature)) ?? []
       }));
+  
+    console.log('Filtered Menu Items:', this.menuItems); // << check filtered menu items
   }
+  @HostListener('window:load', [])
+  @HostListener('window:orientationchange', [])  
 
   @HostListener('window:resize', [])
   onResize(): void {

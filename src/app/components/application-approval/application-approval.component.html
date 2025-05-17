@@ -1,0 +1,71 @@
+<!-- Application Approval Page Wrapper -->
+<div class="dashboard-background">
+    <div class="dashboard-container px-3 py-2">
+      <div class="card shadow-lg rounded-4 border-0 bg-white">
+        <div class="card-body px-4 py-4">
+          <!-- Application Approval Content -->
+          <div class="application-approval-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2 class="fw-bold mb-0">Application Approval</h2>
+            </div>
+  
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let app of applications" (click)="selectApplication(app)" style="cursor:pointer;">
+                    <td>{{ app.customerName }}</td>
+                    <td>Rp{{ app.amount | number }}</td>
+                    <td>{{ app.status }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+            <div *ngIf="selectedApp" class="mt-4">
+              <h5 class="mb-3">Approve: {{ selectedApp.customerName }}</h5>
+              <form [formGroup]="form" class="space-y-4">
+                <div class="mb-3">
+                  <textarea
+                    formControlName="note"
+                    placeholder="Approval note"
+                    class="form-control"
+                    rows="3"
+                  ></textarea>
+                </div>
+  
+                <div class="mb-3 form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="isApproved" [value]="true" id="approveYes">
+                  <label class="form-check-label" for="approveYes">Approve</label>
+                </div>
+                <div class="mb-3 form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="isApproved" [value]="false" id="approveNo">
+                  <label class="form-check-label" for="approveNo">Reject</label>
+                </div>
+  
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-primary btn-sm rounded-pill px-3 py-1" type="button" (click)="approve('marketing')">
+                    Submit as Marketing
+                  </button>
+                  <button class="btn btn-success btn-sm rounded-pill px-3 py-1" type="button" (click)="approve('branch-manager')">
+                    Submit as Branch Manager
+                  </button>
+                  <button class="btn btn-secondary btn-sm rounded-pill px-3 py-1" type="button" (click)="approve('back-office')">
+                    Submit as Back Office
+                  </button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

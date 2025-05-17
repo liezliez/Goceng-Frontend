@@ -182,4 +182,41 @@ export class UserManagementComponent implements OnInit {
       });
     }
   }
-}
+
+  // Pagination methods
+
+  currentPage = 1;
+  itemsPerPage = 5;
+
+  get paginatedUsers(): User[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.users.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  totalPages(): number {
+    return Math.ceil(this.users.length / this.itemsPerPage);
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage = page;
+    }
+  }
+    nextPage(): void {
+      if (this.currentPage < this.totalPages()) {
+        this.currentPage++;
+      }
+    }
+
+    previousPage(): void {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    }
+
+    goToPage(page: number): void {
+      if (page >= 1 && page <= this.totalPages()) {
+        this.currentPage = page;
+      }
+    }
+  }

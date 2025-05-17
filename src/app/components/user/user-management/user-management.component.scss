@@ -1,97 +1,88 @@
-// General styles for the user management container
-.user-management-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
 
-  h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
+.btn-primary {
+  margin-bottom: 20px;
+  display: block;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  th,
+  td {
+    padding: 6px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
   }
 
-  // Styling for the add user button
-  .btn-primary {
-    margin-bottom: 20px;
-    display: block;
-    width: 200px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #007bff;
-    border: none;
-    padding: 10px 20px;
-    color: white;
-    font-size: 1rem;
+  th {
+    background-color: #f8f9fa;
+    color: #333;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  td button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border-radius: 3px;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
 
-    &:hover {
-      background-color: #0056b3;
-    }
-  }
+    &.btn-warning {
+      background-color: #ffc107;
+      border: none;
+      color: white;
 
-  // Styling for the table
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-
-    th,
-    td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f8f9fa;
-      color: #333;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    tr:hover {
-      background-color: #f1f1f1;
-    }
-
-    td button {
-      margin-right: 10px;
-      padding: 5px 10px;
-      font-size: 0.9rem;
-      border-radius: 3px;
-      cursor: pointer;
-
-      &.btn-warning {
-        background-color: #ffc107;
-        border: none;
-        color: white;
-
-        &:hover {
-          background-color: #e0a800;
-        }
+      &:hover {
+        background-color: #e0a800;
       }
+    }
 
-      &.btn-danger {
-        background-color: #dc3545;
-        border: none;
-        color: white;
+    &.btn-danger {
+      background-color: #dc3545;
+      border: none;
+      color: white;
 
-        &:hover {
-          background-color: #c82333;
-        }
+      &:hover {
+        background-color: #c82333;
       }
+    }
 
-      &.btn-success {
-        background-color: #28a745;
-        border: none;
-        color: white;
+    &.btn-success {
+      background-color: #28a745;
+      border: none;
+      color: white;
 
-        &:hover {
-          background-color: #218838;
-        }
+      &:hover {
+        background-color: #218838;
       }
     }
   }

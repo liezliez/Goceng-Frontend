@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -47,14 +47,20 @@ export class AuthService {
     localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, authResponse.refreshToken);
     localStorage.setItem(STORAGE_KEYS.USERNAME, authResponse.username);
     localStorage.setItem(STORAGE_KEYS.FEATURES, JSON.stringify(authResponse.features));
+    console.log('Logged in features:', authResponse.features);
   }
+  refreshToken(): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/refresh`, {}, {
+      withCredentials: true
+    });
+  }  
 
   logout(): void {
     if (!this.getToken()) {
       this.clearStorage();
       return;
     }
-  
+
     this.http.post(`${this.baseUrl}/logout`, {}, {
       withCredentials: true,
       responseType: 'text'
@@ -73,7 +79,6 @@ export class AuthService {
       }
     });
   }
-  
 
   private clearStorage(): void {
     Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
@@ -93,18 +98,18 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return !!this.getToken() && !this.isTokenExpired();
   }
 
   isTokenExpired(): boolean {
     const token = this.getToken();
     if (!token) return true;
-  
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const expiry = payload.exp;
       if (!expiry) return true;
-  
+
       const now = Math.floor(Date.now() / 1000);
       return now > expiry;
     } catch (error) {
@@ -112,7 +117,6 @@ export class AuthService {
       return true;
     }
   }
-  
 
   private decodeToken(): Record<string, any> | null {
     const token = this.getToken();

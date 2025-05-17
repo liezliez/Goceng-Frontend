@@ -1,76 +1,71 @@
 .dashboard-background {
-  background-image: url('/assets/images/dashboard-bg.jpg'); // Your custom background
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-image: none !important;
+  background-color: transparent !important;
+  margin-top: 8px;        // smaller margin-top
+  padding: 10px 0;        // smaller vertical padding
   min-height: 100vh;
-  padding: 40px 0;
-
-  .dashboard-background {
-    background-image: url('/assets/images/dashboard-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
-    margin-top: 16px;
-    // Change this ↓
-    padding: 20px 0; // was 40px 0; reduce top/bottom padding
-
-    // Or for even tighter spacing:
-    // padding-top: 10px;
-    // padding-bottom: 40px;
-
-  }
 
   .card {
-    padding: 2rem; // add inner spacing for content
+    padding: 1rem;        // smaller inner spacing
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(4px);
     border-radius: 1.5rem;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   }
 
+  /* Keep other styles the same */
+}
 
-    .welcome-section {
-      margin-top: 8px;
+/* Sidebar toggle button visible on small screens */
+.app-header button.btn-outline-secondary {
+  display: none; /* Hide by default */
 
-      h1 {
-        font-size: 2.25rem;
-      }
+  @media (max-width: 992px) {
+    display: inline-block; /* Show on medium and below */
+  }
+}
 
-      .welcome-gif {
-        width: 200px;
-        margin-top: 16px;
-        border-radius: 12px;
-        max-width: 100%;
-        height: auto;
-      }
-    }
+/* Responsive main content padding */
+.app-main-content section.p-4 {
+  padding: 20px;
 
-    .news-section {
-      margin-top: 24px;
+  @media (max-width: 768px) {
+    padding: 10px; /* reduce padding on small screens */
+  }
 
-      .news-item {
-        background-color: #f8f9fa;
-        padding: 12px 16px;
-        margin-bottom: 16px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-        transition: background-color 0.3s ease;
+  @media (max-width: 480px) {
+    padding: 8px; /* even smaller on extra small */
+  }
+}
 
-        &:hover {
-          background-color: #f1f3f5;
-        }
+/* Make sidebar collapsible and overlay on mobile */
+@media (max-width: 992px) {
+  .app-sidebar {
+    position: fixed;
+    width: 210px;
+    height: 100vh;
+    top: 0;
+    left: -210px;
+    transition: left 0.3s ease;
 
-        .news-title {
-          font-weight: 600;
-          font-size: 1.15rem;
-        }
-
-        .news-description {
-          font-size: 1rem;
-          color: #6c757d;
-        }
-      }
+    &.mobile-visible {
+      left: 0;
+      z-index: 1050;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
     }
   }
+
+  .app-main-content {
+    margin-left: 0 !important;
+  }
+}
+
+/* Smaller margins and gaps on grid */
+.row {
+  gap: 12px;
+}
+
+.col-lg-3,
+.col-md-6 {
+  min-width: 200px;
+}

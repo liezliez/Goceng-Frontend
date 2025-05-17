@@ -20,18 +20,12 @@ export class LoginComponent {
   onLogin() {
     this.authService.login(this.authRequest).subscribe({
       next: (res) => {
-        console.log('✅ Login response:', res);
-
         this.authService.saveUserDetails(res);
-
-        const storedToken = localStorage.getItem('token');
-        console.log('🗝️ Stored token in localStorage:', storedToken);
 
         this.error = '';
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
-        console.error('❌ Login error:', err);
+      error: () => {
         this.error = 'Invalid login credentials. Please try again.';
       }
     });

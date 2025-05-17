@@ -21,10 +21,11 @@
         <!-- News Section -->
         <section class="news-section">
           <h2 class="h4 fw-bold mb-4 text-primary">Latest News</h2>
-          <div *ngFor="let newsItem of news" class="news-item mb-3 p-3 rounded-3 shadow-sm" style="background-color: #f9f9f9;">
+          <div *ngFor="let newsItem of news" class="news-item mb-3 p-3 rounded-3 shadow-sm">
             <h5 class="mb-1">{{ newsItem.title }}</h5>
             <p class="mb-0 text-muted">{{ newsItem.description }}</p>
           </div>
+          
         </section>
 
       </div>
