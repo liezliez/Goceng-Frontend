@@ -186,7 +186,7 @@ export class UserManagementComponent implements OnInit {
   // Pagination methods
 
   currentPage = 1;
-  itemsPerPage = 5;
+  itemsPerPage = 20;
 
   get paginatedUsers(): User[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;

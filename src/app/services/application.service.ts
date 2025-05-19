@@ -2,17 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export interface ApplicationResponse {
-  id: string;
-  customerName: string;
-  amount: number;
-  purpose: string;
-  status: string;
-  noteMarketing?: string;
-  noteBranchManager?: string;
-  noteBackOffice?: string;
-  updatedAt: string;
-}
+import { ApplicationResponse } from '../models/application-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +36,10 @@ export class ApplicationService {
       { isApproved, note }
     );
   }
+
+  getApplicationsByCurrentUserBranch(): Observable<ApplicationResponse[]> {
+    return this.http.get<ApplicationResponse[]>(`${this.baseUrl}/branch`);
+  }
+  
 }
 // Compare this snippet from src/app/services/auth.service.ts:

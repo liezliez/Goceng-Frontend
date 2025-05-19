@@ -1,20 +1,24 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ApplicationService } from '../../services/application.service';
+import { ApplicationResponse } from '../../models/application-response.model';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { ApplicationService, ApplicationResponse } from '../../services/application.service';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+
+
 
 @Component({
   selector: 'app-application-approval',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgbModalModule],  // <---- Add ReactiveFormsModule here
+  imports: [CommonModule, ReactiveFormsModule, NgbModalModule],
   templateUrl: './application-approval.component.html',
 })
 export class ApplicationApprovalComponent {
   private appService = inject(ApplicationService);
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
 
   applications: ApplicationResponse[] = [];
   selectedApp?: ApplicationResponse;
@@ -22,9 +26,14 @@ export class ApplicationApprovalComponent {
     note: [''],
     isApproved: [true]
   });
+  userRole: string | null = null;
 
   ngOnInit() {
-    this.appService.getAll().subscribe(apps => this.applications = apps);
+    this.userRole = this.authService.getUserRole();
+
+    // Assuming your backend supports filtering by branch/userId:
+    // If you have user id or branch id in token, pass it here.
+    this.appService.getApplicationsByCurrentUserBranch().subscribe(apps => this.applications = apps);
   }
 
   selectApplication(app: ApplicationResponse) {
@@ -32,29 +41,34 @@ export class ApplicationApprovalComponent {
     this.form.reset({ isApproved: true, note: '' });
   }
 
-  approve(role: 'marketing' | 'branch-manager' | 'back-office') {
-    if (!this.selectedApp) return;
+  approve() {
+    if (!this.selectedApp || !this.userRole) return;
 
     const { isApproved, note } = this.form.value;
     const id = this.selectedApp.id;
-    let approval$: any;
 
-    switch (role) {
-      case 'marketing':
+    let approval$;
+
+    switch (this.userRole) {
+      case 'ROLE_MARKETING':
         approval$ = this.appService.marketingApprove(id, isApproved, note);
         break;
-      case 'branch-manager':
+      case 'ROLE_BRANCH_MANAGER':
         approval$ = this.appService.branchManagerApprove(id, isApproved, note);
         break;
-      case 'back-office':
+      case 'ROLE_BACK_OFFICE':
         approval$ = this.appService.backOfficeApprove(id, isApproved, note);
         break;
+      default:
+        alert('You do not have approval rights.');
+        return;
     }
 
     approval$.subscribe(() => {
       alert(`Application ${isApproved ? 'approved' : 'rejected'}!`);
       this.selectedApp = undefined;
-      this.appService.getAll().subscribe(apps => this.applications = apps);
+      this.appService.getApplicationsByCurrentUserBranch()
+      .subscribe((apps: ApplicationResponse[]) => this.applications = apps);
     });
   }
 }
