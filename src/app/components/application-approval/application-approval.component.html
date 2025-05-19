@@ -24,7 +24,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let app of applications">
+                <tr *ngFor="let app of paginatedApplications">
                   <td>{{ app.customerName }}</td>
                   <td>Rp{{ app.amount | number }}</td>
                   <td>{{ app.purpose }}</td>
@@ -44,6 +44,15 @@
                 </tr>
               </tbody>
             </table>
+
+            <!-- Reusable Pagination Component with margin -->
+            <app-pagination
+              [currentPage]="currentPage"
+              [totalItems]="applications.length"
+              [itemsPerPage]="itemsPerPage"
+              (pageChanged)="changePage($event)"
+          ></app-pagination>
+          
           </div>
 
           <!-- Approval Form Panel -->
