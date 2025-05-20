@@ -5,6 +5,10 @@ import { routes } from './app/app.routes'; // Import your routes
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './app/interceptors/auth.interceptor';
+import { registerLocaleData } from '@angular/common';
+import localeId from '@angular/common/locales/id';
+
+registerLocaleData(localeId);
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -12,6 +16,7 @@ bootstrapApplication(AppComponent, {
       withInterceptors([AuthInterceptor])
     ),
     provideRouter(routes),
-    provideAnimations()
+    provideAnimations(),
+    {provide: localeId, useValue: 'id-ID'},
   ]
 }).catch(err => console.error(err));

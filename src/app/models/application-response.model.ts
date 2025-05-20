@@ -1,3 +1,8 @@
+export interface ApprovalNote {
+  role: string;
+  text: string;
+}
+
 export interface ApplicationResponse {
     id: string; // UUID as string
     customerId: string;
@@ -26,5 +31,8 @@ export interface ApplicationResponse {
     nipMarketing?: string;
     nipBranchManager?: string;
     nipBackOffice?: string;
+
+    approvalNotes?: ApprovalNote[];
   }
-  
+
+

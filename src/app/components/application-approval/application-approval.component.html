@@ -26,17 +26,20 @@
               <tbody>
                 <tr *ngFor="let app of paginatedApplications">
                   <td>{{ app.customerName }}</td>
-                  <td>Rp{{ app.amount | number }}</td>
+                  <td>{{ app.amount | number }}</td>
                   <td>{{ app.purpose }}</td>
                   <td>{{ app.status }}</td>
-                  <td>{{ app.tenor }}</td>
-                  <td>{{ app.limitType }} - Rp{{ app.limitAmount | number }}</td>
+                  <td>{{ app.tenor ?? '-' }}</td>
+                  <td>
+                    {{ app.limitType ?? '-' }}
+                    <span *ngIf="app.limitAmount != null"> - Rp{{ app.limitAmount | number }}</span>
+                  </td>
                   <td>{{ app.interestRate != null ? (app.interestRate * 100) + '%' : '-' }}</td>
                   <td>{{ app.createdAt | date: 'short' }}</td>
                   <td>
                     <button
                       class="btn btn-info btn-sm rounded-pill px-3 py-1"
-                      (click)="selectApplication(app)"
+                      (click)="selectApplication(app, reviewModal)"
                     >
                       <i class="bi bi-check-circle-fill"></i> Review
                     </button>
@@ -45,74 +48,211 @@
               </tbody>
             </table>
 
-            <!-- Reusable Pagination Component with margin -->
+            <!-- Pagination Component -->
             <app-pagination
               [currentPage]="currentPage"
               [totalItems]="applications.length"
               [itemsPerPage]="itemsPerPage"
               (pageChanged)="changePage($event)"
-          ></app-pagination>
-          
+            ></app-pagination>
           </div>
-
-          <!-- Approval Form Panel -->
-          <div *ngIf="selectedApp" class="mt-4">
-            <h5 class="mb-3">Approve Application: <strong>{{ selectedApp.customerName }}</strong></h5>
-            <form [formGroup]="form">
-              <div class="mb-3">
-                <label for="note" class="form-label">Approval Note</label>
-                <textarea
-                  formControlName="note"
-                  id="note"
-                  class="form-control"
-                  rows="3"
-                  placeholder="Enter approval or rejection note..."
-                ></textarea>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label me-3">Decision:</label>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" formControlName="isApproved" [value]="true" id="approveYes" />
-                  <label class="form-check-label" for="approveYes">Approve</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" formControlName="isApproved" [value]="false" id="approveNo" />
-                  <label class="form-check-label" for="approveNo">Reject</label>
-                </div>
-              </div>
-
-              <div class="d-flex gap-2 mt-3">
-                <button
-                  *ngIf="userRole === 'ROLE_MARKETING'"
-                  class="btn btn-primary btn-sm rounded-pill px-3 py-1"
-                  type="button"
-                  (click)="approve()"
-                >
-                  Submit as Marketing
-                </button>
-                <button
-                  *ngIf="userRole === 'ROLE_BRANCH_MANAGER'"
-                  class="btn btn-success btn-sm rounded-pill px-3 py-1"
-                  type="button"
-                  (click)="approve()"
-                >
-                  Submit as Branch Manager
-                </button>
-                <button
-                  *ngIf="userRole === 'ROLE_BACK_OFFICE'"
-                  class="btn btn-secondary btn-sm rounded-pill px-3 py-1"
-                  type="button"
-                  (click)="approve()"
-                >
-                  Submit as Back Office
-                </button>
-              </div>
-            </form>
-          </div>
-
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Review Modal -->
+<ng-template #reviewModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Review Application: <strong>{{ selectedApp?.customerName }}</strong>
+    </h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-3">
+      <!-- Left Column: Customer Details -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-secondary text-white fw-bold">Customer Details</div>
+          <div class="card-body" *ngIf="selectedCustomer?.idCustomer">
+            <div class="row gy-2">
+              <div class="row mb-2">
+                <div class="col-sm-4 fw-semibold text-muted">Name:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.name }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">NIK:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.nik }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Phone:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.telpNo }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">DOB:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.dateOfBirth | date }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">POB:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.placeOfBirth }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Address:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.address }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Mother's Maiden Name:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.motherMaidenName }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Occupation:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.occupation }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Salary:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.salary | currency:'IDR':'symbol':'1.0-0' }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Home Ownership:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.homeOwnershipStatus }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Emergency Call:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.emergencyCall }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Credit Limit:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.creditLimit | currency:'IDR':'symbol':'1.0-0' }}</div>
+              
+                <div class="col-sm-4 fw-semibold text-muted">Account No:</div>
+                <div class="col-sm-8">{{ selectedCustomer?.accountNo }}
+                  
+                </div>
+              </div>
+            </div>
+                
+              
+
+            <div class="mt-3">
+              <strong>KTP Image:</strong><br />
+              <img *ngIf="selectedCustomer?.urlKtp" [src]="selectedCustomer?.urlKtp" alt="KTP Image"
+                class="img-fluid rounded border" style="max-height: 180px;" />
+            </div>
+        
+            <div class="mt-3">
+              <strong>Selfie:</strong><br />
+              <img *ngIf="selectedCustomer?.urlSelfie" [src]="selectedCustomer?.urlSelfie" alt="Selfie"
+                class="img-fluid rounded border" style="max-height: 180px;" />
+            </div>
+          </div>
+        </div>
+        
+      </div>
+  <!-- Right Column: Application Details -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-primary text-white fw-bold">Application Details</div>
+          <div class="card-body">
+            <div class="row gy-2">
+              <div class="col-sm-4 fw-semibold text-muted">Customer Name:</div>
+              <div class="col-sm-8">{{ selectedApp?.customerName }}</div>
+
+              <div class="col-sm-4 fw-semibold text-muted">Amount:</div>
+              <div class="col-sm-8">{{ selectedApp?.amount | currency:'IDR':'symbol':'1.0-0' }}</div>
+
+              <div class="col-sm-4 fw-semibold text-muted">Purpose:</div>
+              <div class="col-sm-8">{{ selectedApp?.purpose }}</div>
+
+              <div class="col-sm-4 fw-semibold text-muted">Status:</div>
+              <div class="col-sm-8">{{ selectedApp?.status }}</div>
+
+              <div class="col-sm-4 fw-semibold text-muted">Tenor:</div>
+              <div class="col-sm-8">{{ selectedApp?.tenor ?? '-' }}</div>
+
+              <div class="col-sm-4 fw-semibold text-muted">Limit:</div>
+              <div class="col-sm-8">
+                {{ selectedApp?.limitType ?? '-' }}
+                <span *ngIf="selectedApp?.limitAmount != null"> - {{ selectedApp?.limitAmount | currency:'IDR':'symbol':'1.0-0' }}</span>
+              </div>
+
+              <div class="col-sm-4 fw-semibold text-muted">Interest Rate:</div>
+              <div class="col-sm-8">
+                {{ selectedApp?.interestRate != null ? (selectedApp?.interestRate! * 100) + '%' : '-' }}
+              </div>
+
+              <div class="col-sm-4 fw-semibold text-muted">Created At:</div>
+              <div class="col-sm-8">{{ selectedApp?.createdAt | date: 'short' }}</div>
+
+              <div class="col-sm-4 fw-semibold text-muted">Updated At:</div>
+              <div class="col-sm-8">{{ selectedApp?.updatedAt | date: 'short' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>  
+    </div>
+    <!-- Notes & Decision Form (below two-column layout) -->
+    <div class="mt-4">
+      <!-- Approval Notes -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Approval Notes</h5>
+          <div class="mb-2"><strong>Marketing:</strong> <p [style.color]="selectedApp?.noteMarketing ? 'red' : 'grey'">{{ selectedApp?.noteMarketing || 'No note provided.' }}</p></div>
+          <div class="mb-2"><strong>Branch Manager:</strong> <p [style.color]="selectedApp?.noteBranchManager ? 'red' : 'grey'">{{ selectedApp?.noteBranchManager || 'No note provided.' }}</p></div>
+          <div class="mb-2"><strong>Back Office:</strong> <p [style.color]="selectedApp?.noteBackOffice ? 'red' : 'grey'">{{ selectedApp?.noteBackOffice || 'No note provided.' }}</p></div>
+        </div>
+      </div>
+  
+      <!-- Approval Form -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-success text-white fw-bold">Your Decision</div>
+        <div class="card-body">
+          <form [formGroup]="form">
+            <div class="mb-3">
+              <label for="modalNote" class="form-label">Your Note</label>
+              <textarea
+                formControlName="note"
+                id="modalNote"
+                class="form-control"
+                rows="3"
+                placeholder="Enter your approval or rejection note..."
+              ></textarea>
+            </div>
+  
+            <div class="mb-3">
+              <label class="form-label me-3">Decision:</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="isApproved" [value]="true" id="modalApproveYes" />
+                <label class="form-check-label" for="modalApproveYes">Approve</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="isApproved" [value]="false" id="modalApproveNo" />
+                <label class="form-check-label" for="modalApproveNo">Reject</label>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+
+  <div class="modal-footer">
+    <button
+      *ngIf="userRole === 'MARKETING'"
+      type="button"
+      class="btn btn-primary"
+      (click)="approve(); modal.close()"
+    >
+      Submit as Marketing
+    </button>
+    <button
+      *ngIf="userRole === 'BRANCH_MANAGER'"
+      type="button"
+      class="btn btn-primary"
+      (click)="approve(); modal.close()"
+    >
+      Submit as Branch Manager
+    </button>
+    <button
+      *ngIf="userRole === 'BACK_OFFICE'"
+      type="button"
+      class="btn btn-primary"
+      (click)="approve(); modal.close()"
+    >
+      Submit as Back Office
+    </button>
+  </div>
+</ng-template>
