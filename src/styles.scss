@@ -340,3 +340,19 @@ textarea.form-control {
 .card-body .text-break {
   word-break: break-word;
 }
+
+.hero-section {
+  background: linear-gradient(135deg, #2a2a72 0%, #009ffd 100%);
+  position: relative;
+  color: #fff;
+  padding: 100px 0;
+}
+.hero-bg img {
+  opacity: 0.12;
+  object-fit: cover;
+  z-index: 1;
+}
+.hero-section .container {
+  z-index: 2;
+  position: relative;
+}
