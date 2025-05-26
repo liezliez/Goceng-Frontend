@@ -1,84 +1,171 @@
-<div class="container py-5">
+<div class="container-fluid py-5 bg-light min-vh-100 d-flex align-items-center">
+  <div class="container">
+    <div class="row align-items-center justify-content-between">
 
-  <!-- Stats Section -->
-  <section class="bg-light p-5 rounded-4 shadow mb-5 text-center border">
-    <h2 class="mb-4 text-primary"><i class="bi bi-bar-chart-line-fill me-2"></i>Statistik Goceng</h2>
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <p class="fs-5 mb-2"><strong>Total Pinjaman:</strong> {{ stats.totalLoanDisbursed }}</p>
-        <p class="fs-5"><strong>Jumlah Download Aplikasi:</strong> {{ stats.appDownloads }}</p>
+      <!-- Left Section: Welcome -->
+      <div class="col-lg-6 mb-5 mb-lg-0 text-center text-lg-start">
+        <div class="d-flex align-items-center justify-content-center justify-content-lg-start mb-4">
+          <img src="../assets/Logo.png" alt="Goceng Logo" style="height: 130px;" />
+          <h1 class="display-4 fw-bold mb-0 ms-3">
+            Welcome to <span class="text-primary">Goceng</span>
+          </h1>
+        </div>
+        <p class="fs-5 text-muted">
+          Internal quick loan application for employees. Transparent, fast, and reliable.
+        </p>
+        <div class="mt-4">
+          <a routerLink="/login" class="btn btn-primary btn-lg shadow-sm me-2">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login to App
+          </a>
+          <a routerLink="/learn-more" class="btn btn-outline-secondary btn-lg shadow-sm me-2">
+            Learn More
+          </a>
+          <!-- Scroll Down Button -->
+          <button class="btn btn-secondary btn-lg shadow-sm" (click)="scrollToSimulator()">
+            <i class="bi bi-arrow-down-circle me-2"></i>See Loan Simulator
+          </button>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Loan Options Section -->
-  <section class="bg-white p-5 rounded-4 shadow mb-5 border">
-    <h2 class="mb-4 text-success"><i class="bi bi-cash-stack me-2"></i>Opsi Pinjaman</h2>
-    <div class="row">
-      <div *ngFor="let option of loanOptions; let i = index" class="col-md-6 mb-4">
-        <div class="card h-100 shadow-sm border-0 rounded-3">
-          <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-              <h5 class="card-title mb-1">{{ option.amount }}</h5>
-              <p class="text-muted small mb-0">{{ option.duration }}</p>
-            </div>
-            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" [attr.data-bs-target]="'#loanModal' + i">
-              Detail
-            </button>
+      <!-- Right Section: Card with Stats and Features -->
+      <div class="col-lg-5">
+        <div class="p-4 p-lg-5 bg-white shadow rounded-4">
+
+          <!-- Stats -->
+          <h2 class="mb-3 fw-semibold text-center text-success">
+            <i class="bi bi-bar-chart-line-fill me-2"></i>Goceng Statistics
+          </h2>
+          <div class="text-center text-muted mb-4">
+            <p class="fs-6 mb-2"><strong>Total Loans Disbursed:</strong> {{ stats.totalLoanDisbursed }}</p>
+            <p class="fs-6"><strong>Number of Downloads:</strong> {{ stats.appDownloads }}</p>
           </div>
+
+          <!-- Loan Options -->
+          <h3 class="h5 fw-semibold text-center text-primary mt-4 mb-3">
+            <i class="bi bi-cash-stack me-2"></i>Loan Options
+          </h3>
+          <div class="d-flex flex-row overflow-auto gap-3 mb-3">
+            <div *ngFor="let option of loanOptions.slice(0,2); let i = index" class="flex-shrink-0" style="min-width: 200px;">
+              <div class="border rounded-3 p-3 text-center shadow-sm h-100">
+                <h6 class="mb-1">{{ option.amount }}</h6>
+                <small class="text-muted">{{ option.duration }}</small>
+                <div class="mt-2">
+                  <button class="btn btn-sm btn-outline-primary w-100"
+                          data-bs-toggle="modal" [attr.data-bs-target]="'#loanModal' + i">
+                    Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonials -->
+          <h3 class="h5 fw-semibold text-center text-warning mt-4 mb-3">
+            <i class="bi bi-chat-left-quote-fill me-2"></i>Testimonials
+          </h3>
+          <div id="testimonialCarouselMini" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner text-center px-3">
+              <div *ngFor="let t of testimonials; let i = index"
+                   class="carousel-item"
+                   [class.active]="i === 0">
+                <h6 class="mb-1">{{ t.name }} <small class="text-muted">({{ t.age }} yrs)</small></h6>
+                <p class="text-muted fst-italic small mb-1">“{{ t.message }}”</p>
+                <small class="text-muted">Amount: {{ t.amount }}</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Media -->
+          <div class="text-center mt-4">
+            <span class="text-muted">Follow us:</span>
+            <div class="mt-2">
+              <a href="https://twitter.com" target="_blank" rel="noopener" class="text-primary me-3 fs-4">
+                <i class="bi bi-twitter" aria-label="Twitter"></i>
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener" class="text-primary fs-4">
+                <i class="bi bi-facebook" aria-label="Facebook"></i>
+              </a>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
 
-    <!-- Modals -->
+    <!-- Loan Simulator (moved outside the card) -->
+    <div class="row justify-content-center mt-5" id="loanSimulatorSection">
+      <div class="col-lg-8">
+        <div class="p-4 bg-white shadow rounded-4">
+
+          <h3 class="h5 fw-semibold text-center text-primary mb-3">
+            <i class="bi bi-calculator me-2"></i>Loan Simulator
+          </h3>
+
+          <div class="d-flex justify-content-center mb-3">
+            <div *ngFor="let plafon of plafonTypes" class="me-3">
+              <button class="btn"
+                      [ngClass]="selectedPlafon === plafon ? 'btn-primary' : 'btn-outline-primary'"
+                      (click)="selectPlafon(plafon)">
+                {{ plafon }}
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="loanAmount" class="form-label">Loan Amount (Rp):</label>
+            <input type="number"
+                   id="loanAmount"
+                   class="form-control"
+                   [(ngModel)]="loanAmount"
+                   (ngModelChange)="simulateLoan()"
+                   min="100000" />
+          </div>
+
+          <div class="mb-3">
+            <label for="loanTenor" class="form-label">Tenor (months):</label>
+            <select id="loanTenor"
+                    class="form-select"
+                    [(ngModel)]="loanTenor"
+                    (ngModelChange)="simulateLoan()">
+              <option *ngFor="let t of tenorOptions" [ngValue]="t">{{ t }}</option>
+            </select>
+          </div>
+
+          <div *ngIf="simulationResult.total > 0" class="border rounded-3 p-3 bg-light">
+            <p><strong>Interest:</strong> Rp {{ simulationResult.interest | number:'1.0-0' }}</p>
+            <p><strong>Principal:</strong> Rp {{ simulationResult.principal | number:'1.0-0' }}</p>
+            <p><strong>Total Loan:</strong> Rp {{ simulationResult.total | number:'1.0-0' }}</p>
+            <p><strong>Monthly Installment:</strong> Rp {{ simulationResult.installment | number:'1.0-0' }}</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Loan Detail Modals -->
     <ng-container *ngFor="let option of loanOptions; let i = index">
       <div class="modal fade" [id]="'loanModal' + i" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content rounded-4">
             <div class="modal-header">
-              <h5 class="modal-title">Detail Pinjaman</h5>
+              <h5 class="modal-title">Loan Details</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-              <p><strong>Jumlah Pinjaman:</strong> {{ option.amount }}</p>
-              <p><strong>Durasi:</strong> {{ option.duration }}</p>
-              <p class="text-muted">Ajukan pinjaman sesuai kebutuhanmu dengan proses cepat dan aman.</p>
+              <p><strong>Loan Amount:</strong> {{ option.amount }}</p>
+              <p><strong>Duration:</strong> {{ option.duration }}</p>
+              <p class="text-muted">
+                Apply for a loan tailored to your needs with a quick and secure process.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </ng-container>
-  </section>
 
-  <!-- Testimonials Section -->
-  <section class="bg-light p-5 rounded-4 shadow mb-5 border">
-    <h2 class="mb-4 text-warning"><i class="bi bi-chat-left-quote-fill me-2"></i>Testimoni</h2>
-    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
-      <div class="carousel-inner text-center px-5">
-        <div *ngFor="let t of testimonials; let i = index" class="carousel-item" [class.active]="i === 0">
-          <h5 class="mb-1">{{ t.name }} <small class="text-muted">({{ t.age }} tahun)</small></h5>
-          <blockquote class="blockquote">
-            <p class="mb-3">“{{ t.message }}”</p>
-            <footer class="blockquote-footer">
-              Jumlah Pinjaman: <cite title="Amount">{{ t.amount }}</cite>
-            </footer>
-          </blockquote>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
-    </div>
-  </section>
-
-  <!-- Login Button -->
-  <div class="text-center">
-    <a routerLink="/login" class="btn btn-primary btn-lg shadow px-5 py-2 rounded-pill">
-      <i class="bi bi-box-arrow-in-right me-2"></i>Masuk ke Akun
-    </a>
   </div>
-
 </div>
+
+<footer class="text-center mt-5 text-muted small">
+  <p>© {{ currentYear }} Goceng. For internal employee use only.</p>
+</footer>

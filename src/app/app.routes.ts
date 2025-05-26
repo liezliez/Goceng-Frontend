@@ -5,13 +5,18 @@ import { AuthGuard } from './services/auth.guard';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // Public root route (Landing Page)
+  { path: '', component: LandingPageComponent },
 
+  // Optional alias
+  { path: 'landing', redirectTo: '', pathMatch: 'full' },
+
+  // Login
   { path: 'login', component: LoginComponent },
-  { path: 'landing', component: LandingPageComponent },
 
+  // Authenticated routes
   {
-    path: '',
+    path: 'app', // ← Changed from '' to 'app'
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     children: [
@@ -33,5 +38,7 @@ export const routes: Routes = [
     ],
   },
 
-  { path: '**', redirectTo: 'login' },
+  // Catch-all
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
+

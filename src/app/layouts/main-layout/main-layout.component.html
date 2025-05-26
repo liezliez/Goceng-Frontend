@@ -20,7 +20,7 @@
       />
     </div>
 
-    <ul class="menu-list list-unstyled px-2">
+    <ul class="menu-list list-unstyled px-2" *ngIf="menuItems.length > 0; else noApplications">
       <li
         class="menu-item mb-2"
         *ngFor="let item of menuItems"
@@ -61,6 +61,11 @@
         </ul>
       </li>
     </ul>
+    <ng-template #noApplications>
+      <div class="p-3 text-center text-muted">
+        No applications available.
+      </div>
+    </ng-template>
   </aside>
 
   <main
@@ -98,5 +103,26 @@
     <section class="p-4">
       <router-outlet></router-outlet>
     </section>
+
+    <div
+      class="toast align-items-center text-white bg-danger border-0 position-fixed bottom-0 end-0 m-3"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      #noAppsToast
+    >
+      <div class="d-flex">
+        <div class="toast-body">
+          No applications available for your account.
+        </div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
+
   </main>
 </div>
