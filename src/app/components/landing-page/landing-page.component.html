@@ -10,7 +10,7 @@
             Pinjem dulu <span class="text-warning">#Goceng</span>
           </h1>
         </div>
-        <p class="lead mb-4 text-light">
+        <p class="lead mb-4 text-light" style="color: #f8f9fa !important;">
           Dapatkan pinjaman tunai cair tanpa ribet. Proses digital, aman, dan transparan.
         </p>
         <ul class="list-unstyled fs-6 mb-4">
@@ -99,7 +99,7 @@
       </div>
 
       <div class="mb-2" data-aos="fade-right">
-        <label for="loanAmount" class="form-label text-dark fw-semibold mb-1">Jumlah Pinjaman (Rp)</label>
+        <label for="loanAmount" class="form-label text-dark fw-bold mb-1">Jumlah Pinjaman</label>
         <input type="number"
                id="loanAmount"
                class="form-control form-control-sm"
@@ -110,7 +110,7 @@
       </div>
 
       <div class="mb-3" data-aos="fade-left">
-        <label for="loanTenor" class="form-label text-dark fw-semibold mb-1">Tenor (bulan)</label>
+        <label for="loanTenor" class="form-label text-dark fw-bold mb-1">Tenor (bulan)</label>
         <select id="loanTenor"
                 class="form-select form-select-sm"
                 [(ngModel)]="loanTenor"
@@ -119,7 +119,7 @@
         </select>
       </div>
 
-      <div *ngIf="simulationResult.total > 0" class="bg-white rounded-3 px-3 py-2 shadow-sm" data-aos="fade-up">
+      <div *ngIf="simulationResult.total > 0" class="rounded-3 px-3 py-2" data-aos="fade-up" style="background: #ffffffee;">
         <p class="mb-1"><strong>Bunga:</strong> Rp.{{ simulationResult.interest | number:'1.0-0' }}</p>
         <p class="mb-1"><strong>Pokok:</strong> Rp.{{ simulationResult.principal | number:'1.0-0' }}</p>
         <p class="mb-1"><strong>Total:</strong> Rp.{{ simulationResult.total | number:'1.0-0' }}</p>
@@ -128,7 +128,6 @@
     </div>
   </div>
 </section>
-
 
 <!-- Loan Modals -->
 <ng-container *ngFor="let option of loanOptions; let i = index">
@@ -151,5 +150,5 @@
 
 <!-- Footer -->
 <footer class="text-center mt-5 text-muted small" data-aos="fade-up">
-  <p>© {{ currentYear }} Goceng. Aplikasi pinjaman terpercaya — Pinjem dulu #Goceng.</p>
+  <p>© {{ currentYear }} Goceng. Aplikasi pinjaman terpercaya — Pinjem dulu di aplikasi #Goceng.</p>
 </footer>
