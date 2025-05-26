@@ -16,7 +16,7 @@ export const routes: Routes = [
 
   // Authenticated routes
   {
-    path: 'app', // ← Changed from '' to 'app'
+    path: '', // ← Changed from '' to 'app'
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     children: [
