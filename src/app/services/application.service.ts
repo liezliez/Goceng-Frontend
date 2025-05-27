@@ -12,8 +12,9 @@ export class ApplicationService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<ApplicationResponse[]> {
-    return this.http.get<ApplicationResponse[]>(`${this.baseUrl}`);
+  // Use this method to get applications ONLY for current user's branch
+  getApplicationsByCurrentUserBranch(): Observable<ApplicationResponse[]> {
+    return this.http.get<ApplicationResponse[]>(`${this.baseUrl}/branch`);
   }
 
   marketingApprove(id: string, isApproved: boolean, note: string): Observable<ApplicationResponse> {
@@ -36,10 +37,5 @@ export class ApplicationService {
       { isApproved, note }
     );
   }
-
-  getApplicationsByCurrentUserBranch(): Observable<ApplicationResponse[]> {
-    return this.http.get<ApplicationResponse[]>(`${this.baseUrl}/branch`);
-  }
-  
 }
 // Compare this snippet from src/app/services/auth.service.ts:

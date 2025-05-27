@@ -78,10 +78,10 @@ export class ApplicationApprovalComponent implements OnInit {
       isApproved: true,
       note: ''
     });
-  
-    this.selectedCustomer = undefined; // reset previous customer data
-  
-    if (app.customerId) {  // assuming the app has a customerId field
+
+    this.selectedCustomer = undefined;
+
+    if (app.customerId) {
       this.customerService.getCustomerById(app.customerId).subscribe({
         next: (customer) => {
           this.selectedCustomer = customer;
@@ -92,10 +92,9 @@ export class ApplicationApprovalComponent implements OnInit {
         }
       });
     }
-  
+
     this.modalInstance = this.modalService.open(modalContent, { centered: true, size: 'lg' });
   }
-  
 
   approve(): void {
     if (!this.selectedApp || !this.userRole) return;
@@ -130,7 +129,7 @@ export class ApplicationApprovalComponent implements OnInit {
       },
       error: (err) => {
         let message = 'Approval failed.';
-    
+
         if (err.error && typeof err.error === 'string') {
           message = err.error;
         } else if (err.status === 409) {
@@ -138,7 +137,7 @@ export class ApplicationApprovalComponent implements OnInit {
         } else if (err.status === 403) {
           message = 'You are not authorized to perform this action.';
         }
-    
+
         alert(message);
       }
     });

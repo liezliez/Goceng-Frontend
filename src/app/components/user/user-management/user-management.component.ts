@@ -36,12 +36,12 @@ export class UserManagementComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
     this.loadRoles();
-  
+
     this.userEditForm.get('idRole')?.valueChanges.subscribe(value => {
       console.log('Role dropdown changed to:', value);
     });
   }
-  
+
 
   loadUsers(): void {
     this.loading = true;
@@ -112,21 +112,21 @@ export class UserManagementComponent implements OnInit {
       alert('Please fill all required fields correctly.');
       return;
     }
-  
+
     const formValue = this.userEditForm.getRawValue();
-  
+
     console.log('Form raw values:', formValue);
     console.log('idRole as number:', Number(formValue.idRole));
-  
+
     const payload = {
       name: formValue.name,
       email: formValue.email,
       account_status: formValue.accountStatus,
       idRole: Number(formValue.idRole),  // convert string to number explicitly
     };
-  
+
     console.log('Payload to send:', payload);
-  
+
     if (this.selectedUser) {
       this.loading = true;
       this.userService.editUser(this.selectedUser.id, payload).subscribe({
@@ -148,7 +148,7 @@ export class UserManagementComponent implements OnInit {
       alert('No user selected for editing.');
     }
   }
-  
+
 
   softDeleteUser(userId: string): void {
     if (confirm('Are you sure you want to delete this user?')) {
