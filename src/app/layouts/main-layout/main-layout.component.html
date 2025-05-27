@@ -32,7 +32,6 @@
           class="menu-link d-flex align-items-center px-2 py-2 rounded text-dark text-decoration-none"
           (click)="item.children?.length ? toggleSubMenu(item) : closeSidebar()"
           [attr.aria-expanded]="item.expanded ? 'true' : 'false'"
-          href="javascript:void(0)"
         >
           <i class="bi me-2" [ngClass]="item.icon"></i>
           <span *ngIf="!isSidebarCollapsed || isMobile">{{ item.label }}</span>
@@ -43,10 +42,7 @@
           ></i>
         </a>
 
-        <ul
-          *ngIf="item.children?.length && item.expanded"
-          class="submenu list-unstyled ps-4"
-        >
+        <ul *ngIf="item.children?.length && item.expanded" class="submenu list-unstyled ps-4">
           <li *ngFor="let child of item.children" class="submenu-item mb-1">
             <a
               [routerLink]="child.route"
@@ -61,6 +57,7 @@
         </ul>
       </li>
     </ul>
+
     <ng-template #noApplications>
       <div class="p-3 text-center text-muted">
         No applications available.
@@ -90,10 +87,13 @@
       </button>
 
       <div class="d-flex align-items-center">
-        <div class="text-end me-3">
+        <div class="text-end me-3" *ngIf="userName; else loadingUser">
           <div class="fw-semibold text-dark">Welcome, {{ userName }}</div>
-          <div class="small text-muted">{{ formatRole(userRole) }}</div>
+          <div class="small text-muted">{{ (formattedRole || '') + ' ' + (userBranch || '') }}</div>
         </div>
+        <ng-template #loadingUser>
+          <div class="spinner-border spinner-border-sm text-secondary me-3" role="status" aria-hidden="true"></div>
+        </ng-template>
         <button class="btn btn-sm btn-outline-danger" (click)="logout()">
           Logout
         </button>
@@ -123,6 +123,5 @@
         ></button>
       </div>
     </div>
-
   </main>
 </div>

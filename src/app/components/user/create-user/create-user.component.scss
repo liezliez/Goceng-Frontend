@@ -4,10 +4,10 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f3f6f9;
+  background-color: #f0f4f8; // lighter, calm blue-gray
   margin: 0;
   padding: 0;
-  color: #333;
+  color: #2e3a59; // dark slate blue text
 }
 
 h2 {
@@ -15,7 +15,11 @@ h2 {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 24px;
-  color: #222;
+  color: #1a237e; // deep indigo
+}
+
+.wrapper {
+  margin: 80px auto;
 }
 
 .card {
@@ -24,11 +28,12 @@ h2 {
   padding: 32px 36px;
   background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e1e1e1;
+  box-shadow: 0 6px 20px rgba(26, 35, 126, 0.15); // subtle indigo shadow
+  border: 1px solid #c5cae9; // soft light indigo border
 }
 
-.form {
+.form,
+.form-signin {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -39,29 +44,24 @@ h2 {
   flex-direction: column;
   gap: 6px;
 
-  label {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #222;
-  }
-
   input,
   select {
     padding: 12px 14px;
     font-size: 1rem;
-    border: 1.5px solid #ccc;
+    border: 1.5px solid #9fa8da; // medium light indigo border
     border-radius: 6px;
     transition: border 0.3s ease, box-shadow 0.3s ease;
+    color: #2e3a59;
 
     &:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+      border-color: #3949ab; // vibrant indigo
+      box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.25); // subtle blue glow
       outline: none;
     }
   }
 
   small {
-    color: #d9534f;
+    color: #e53935; // bright red for errors
     font-size: 0.85rem;
     font-weight: 500;
     margin-top: 2px;
@@ -76,7 +76,7 @@ button[type='submit'],
   padding: 14px;
   font-size: 1.1rem;
   font-weight: 600;
-  background-color: #007bff;
+  background-color: #3949ab; // indigo
   color: white;
   border: none;
   border-radius: 8px;
@@ -84,11 +84,11 @@ button[type='submit'],
   transition: background-color 0.3s ease;
 
   &:hover:not(:disabled) {
-    background-color: #0056b3;
+    background-color: #1a237e; // darker indigo on hover
   }
 
   &:disabled {
-    background-color: #7abaff;
+    background-color: #9fa8da; // light indigo disabled
     cursor: not-allowed;
   }
 }
@@ -102,9 +102,35 @@ button[type='submit'],
 }
 
 .success {
-  color: #28a745;
+  color: #43a047; // fresh green
 }
 
 .error {
-  color: #d9534f;
+  color: #e53935; // bright red
+}
+
+/* Form-signin specific tweaks */
+.form-signin-heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-signin .checkbox {
+  margin-bottom: 30px;
+  font-weight: normal;
+}
+
+.form-signin .form-control {
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  color: #2e3a59;
+}
+
+.form-signin small {
+  color: #e53935;
+  display: block;
+  margin-top: -12px;
+  margin-bottom: 10px;
+  font-size: 12px;
 }

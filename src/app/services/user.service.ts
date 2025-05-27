@@ -16,6 +16,26 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
+  getCurrentUser(): User | null {
+    const userJson = localStorage.getItem('user');
+    return userJson ? JSON.parse(userJson) as User : null;
+  }
+
+  getUserProfile(): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/me`, {
+      withCredentials: true
+    });
+  }
+
+  getUserBranch(): string | null {
+    const user = this.getCurrentUser();
+    return user?.branch?.name ?? null;
+  }
+  getUserRole(): string | null {
+    const user = this.getCurrentUser();
+    return user?.role?.roleName ?? null;
+  }
+
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/list`).pipe(
       map(users => users.map(u => ({

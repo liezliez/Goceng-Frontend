@@ -53,7 +53,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.baseUrl}/refresh`, {}, {
       withCredentials: true
     });
-  }  
+  }
 
   logout(): void {
     if (!this.getToken()) {
@@ -91,12 +91,25 @@ export class AuthService {
   getUsername(): string | null {
     return localStorage.getItem(STORAGE_KEYS.USERNAME);
   }
-
+  getRefreshToken(): string | null {
+    return localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+  }
   getUserFeatures(): string[] {
     const features = localStorage.getItem(STORAGE_KEYS.FEATURES);
     return features ? JSON.parse(features) : [];
   }
 
+  getUserBranch(): string | null {
+    const payload = this.decodeToken();
+    console.log('Decoded token payload:', payload);  // Debug output
+    return payload?.['branchName'] ?? null;
+
+  }
+
+  getUserId(): string | null {
+    const payload = this.decodeToken();
+    return payload?.['id'] ?? null;
+  }
   isLoggedIn(): boolean {
     return !!this.getToken() && !this.isTokenExpired();
   }

@@ -1,14 +1,8 @@
-import {
-  Component,
-  OnInit,
-  HostListener,
-  AfterViewInit,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
+import { Component, OnInit, HostListener, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';  // <-- import UserService here
 import {
   FEATURE_BASED_MENU,
   MenuItem,
@@ -27,6 +21,7 @@ export class MainLayoutComponent implements OnInit, AfterViewInit {
   userName: string = 'User';
   userRole: string = 'Unknown Role';
   formattedRole: string = '';
+  userBranch: string = 'N/A';
 
   menuItems: MenuItem[] = [];
 
@@ -36,12 +31,33 @@ export class MainLayoutComponent implements OnInit, AfterViewInit {
 
   @ViewChild('noAppsToast') noAppsToast!: ElementRef;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,  // <-- inject UserService
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.userName = this.authService.getUsername() ?? 'User';
-    this.userRole = this.authService.getUserRole() ?? 'Unknown Role';
-    this.formattedRole = this.formatRole(this.userRole);
+    // Fetch full user profile from backend
+    this.userService.getUserProfile().subscribe({
+      next: user => {
+        this.userName = user.name ?? 'User';
+        this.userRole = user.role?.roleName ?? 'Unknown Role';
+        this.formattedRole = this.formatRole(this.userRole);
+        this.userBranch = user.branch?.name ?? 'N/A';
+
+        // Optionally update local storage user cache
+        localStorage.setItem('user', JSON.stringify(user));
+      },
+      error: err => {
+        console.error('Failed to fetch user profile', err);
+        // fallback to authService if needed:
+        this.userName = this.authService.getUsername() ?? 'User';
+        this.userRole = this.authService.getUserRole() ?? 'Unknown Role';
+        this.userBranch = this.authService.getUserBranch() ?? 'N/A';
+        this.formattedRole = this.formatRole(this.userRole);
+      }
+    });
 
     this.checkScreenSize();
 
@@ -62,7 +78,6 @@ export class MainLayoutComponent implements OnInit, AfterViewInit {
     console.log('Filtered Menu Items:', this.menuItems);
 
     if (this.menuItems.length === 0) {
-      // Use slight delay to ensure the view initializes before toast is shown
       setTimeout(() => this.showNoAppsToast(), 100);
     }
   }
@@ -73,7 +88,7 @@ export class MainLayoutComponent implements OnInit, AfterViewInit {
     const toastEl = this.noAppsToast?.nativeElement;
     if (toastEl) {
       const toast = new bootstrap.Toast(toastEl, {
-        delay: 3000, // Auto-hide after 3 seconds
+        delay: 3000,
       });
       toast.show();
     }
