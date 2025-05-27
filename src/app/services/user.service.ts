@@ -1,9 +1,12 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
+import { ROLES } from '../components/constants/roles';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +20,7 @@ export class UserService {
     return this.http.get<User[]>(`${this.baseUrl}/list`).pipe(
       map(users => users.map(u => ({
         ...u,
-        id: u.id,  // Use id as returned by API
+        id: u.id,
         account_status: u.account_status || 'N/A',
         role: u.role ? {
           id: u.role.id,
@@ -61,11 +64,37 @@ export class UserService {
     return this.http.put(`${this.baseUrl}/id/${userId}/edit`, userData);
   }
 
+
   createUser(userData: any, branchId: string): Observable<any> {
     return this.http.post(`${this.baseUrl}`, userData, {
       params: { branchId }
     });
   }
+
+  getAllBranches(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/branches`);
+  }
+
+
+  // New: Superadmin creates employee (role = EMPLOYEE)
+  createEmployeeWithRole(role: string, employeeData: {
+    name: string;
+    email: string;
+    password: string;
+    branchId?: string;
+  }): Observable<any> {
+    const payload = {
+      ...employeeData,
+      role // role is passed from the component as a string like ROLES.SUPERADMIN etc.
+    };
+
+    const options = employeeData.branchId
+      ? { params: { branchId: employeeData.branchId } }
+      : {};
+
+    return this.http.post(`${this.baseUrl}`, payload, options);
+  }
+
 
   getAllRoles(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.apiUrl}/roles`);

@@ -26,6 +26,11 @@ export const FEATURE_BASED_MENU: MenuItem[] = [
     route: '/approval',
     feature: 'APPROVE_APPLICATION'  // Exactly match userFeatures string
   },
+  {
+    label: 'Create User',
+    icon: 'bi-person-plus',
+    route: '/users/create',
+    feature: 'CREATE_USER'  // This feature should exist in user's permissions to see this menu
+  }
   // other items
 ];
-    

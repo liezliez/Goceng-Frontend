@@ -16,7 +16,7 @@ export const routes: Routes = [
 
   // Authenticated routes
   {
-    path: '', // ← Changed from '' to 'app'
+    path: '',
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     children: [
@@ -24,6 +24,11 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
+      },
+      {
+        path: 'users/create',
+        loadComponent: () =>
+          import('./components/user/create-user/create-user.component').then(m => m.CreateUserComponent),
       },
       {
         path: 'users',
@@ -36,9 +41,9 @@ export const routes: Routes = [
           import('./components/application-approval/application-approval.component').then(m => m.ApplicationApprovalComponent),
       },
     ],
+
   },
 
   // Catch-all
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
-
