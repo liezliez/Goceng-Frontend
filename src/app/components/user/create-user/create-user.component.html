@@ -8,54 +8,120 @@
 
           <form [formGroup]="createUserForm" (ngSubmit)="onSubmit()" class="form-signin">
             <div class="mb-3">
-              <input type="text" class="form-control" id="name" formControlName="name" placeholder="Full Name" required />
-              <small *ngIf="createUserForm.get('name')?.invalid && createUserForm.get('name')?.touched" class="text-danger">
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                formControlName="name"
+                placeholder="Full Name"
+                required
+              />
+              <small
+                *ngIf="createUserForm.get('name')?.invalid && createUserForm.get('name')?.touched"
+                class="text-danger"
+              >
                 Name is required
               </small>
             </div>
 
             <div class="mb-3">
-              <input type="email" class="form-control" id="email" formControlName="email" placeholder="Email" required />
-              <small *ngIf="createUserForm.get('email')?.invalid && createUserForm.get('email')?.touched" class="text-danger">
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                formControlName="email"
+                placeholder="Email"
+                required
+              />
+              <small
+                *ngIf="createUserForm.get('email')?.invalid && createUserForm.get('email')?.touched"
+                class="text-danger"
+              >
                 Valid email is required
               </small>
             </div>
 
             <div class="mb-3">
-              <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password" required />
-              <small *ngIf="createUserForm.get('password')?.invalid && createUserForm.get('password')?.touched" class="text-danger">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                formControlName="password"
+                placeholder="Password"
+                required
+              />
+              <small
+                *ngIf="createUserForm.get('password')?.invalid && createUserForm.get('password')?.touched"
+                class="text-danger"
+              >
                 Password is required
               </small>
             </div>
 
             <div class="mb-3">
-              <select id="role" class="form-select" formControlName="role" (change)="onRoleChange($event)">
+              <select
+                id="role"
+                class="form-select"
+                formControlName="role"
+                (change)="onRoleChange($event)"
+              >
                 <option value="">Select Role</option>
-                <option *ngFor="let role of roles" [value]="role.value">{{ role.label }}</option>
+                <option *ngFor="let role of roles" [value]="role.value">
+                  {{ role.label }}
+                </option>
               </select>
-              <small *ngIf="createUserForm.get('role')?.invalid && createUserForm.get('role')?.touched" class="text-danger">
+              <small
+                *ngIf="createUserForm.get('role')?.invalid && createUserForm.get('role')?.touched"
+                class="text-danger"
+              >
                 Role is required
               </small>
             </div>
 
-            <div class="mb-3" *ngIf="createUserForm.get('role')?.value !== ROLES.MARKETING">
-              <select id="branchId" class="form-select" formControlName="branchId">
+            <div
+              class="mb-3"
+              *ngIf="createUserForm.get('role')?.value !== ROLES.MARKETING"
+            >
+              <select
+                id="branchId"
+                class="form-select"
+                formControlName="branchId"
+              >
                 <option value="">Select Branch</option>
-                <option *ngFor="let branch of branches" [value]="branch.id">{{ branch.name }}</option>
+                <option *ngFor="let branch of branches" [value]="branch.id">
+                  {{ branch.name }}
+                </option>
               </select>
-              <small *ngIf="createUserForm.get('branchId')?.invalid && createUserForm.get('branchId')?.touched" class="text-danger">
+              <small
+                *ngIf="createUserForm.get('branchId')?.invalid && createUserForm.get('branchId')?.touched"
+                class="text-danger"
+              >
                 Branch is required
               </small>
             </div>
 
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary btn-lg" [disabled]="createUserForm.invalid || loading">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="createUserForm.invalid || loading"
+              >
                 {{ loading ? 'Creating...' : 'Create User' }}
               </button>
             </div>
 
-            <p class="text-success fw-semibold text-center mt-3" *ngIf="successMessage">{{ successMessage }}</p>
-            <p class="text-danger fw-semibold text-center mt-3" *ngIf="errorMessage">{{ errorMessage }}</p>
+            <p
+              class="text-success fw-semibold text-center mt-3"
+              *ngIf="successMessage"
+            >
+              {{ successMessage }}
+            </p>
+            <p
+              class="text-danger fw-semibold text-center mt-3"
+              *ngIf="errorMessage"
+            >
+              {{ errorMessage }}
+            </p>
           </form>
         </div>
       </div>

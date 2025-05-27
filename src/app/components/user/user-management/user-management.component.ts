@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ROLES } from '../../constants/roles';
 
 @Component({
   selector: 'app-user-management',
@@ -17,8 +18,17 @@ export class UserManagementComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
   userEditForm: FormGroup;
-  roles: { id: number; roleName: string }[] = [];
+  roles = [
+    { id: 1, roleName: 'ROLE_SUPERADMIN' },
+    { id: 5, roleName: 'ROLE_BACK_OFFICE' },
+    { id: 4, roleName: 'ROLE_BRANCH_MANAGER' },
+    { id: 3, roleName: 'ROLE_MARKETING' },
+    { id: 2, roleName: 'ROLE_CUSTOMER' }
+  ];
+
   loading = false;
+  currentPage = 1;
+  itemsPerPage = 20;
 
   constructor(
     private userService: UserService,
@@ -29,19 +39,13 @@ export class UserManagementComponent implements OnInit {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       accountStatus: ['', Validators.required],
-      idRole: ['', Validators.required]  // role ID, number
+      idRole: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.loadUsers();
-    this.loadRoles();
-
-    this.userEditForm.get('idRole')?.valueChanges.subscribe(value => {
-      console.log('Role dropdown changed to:', value);
-    });
   }
-
 
   loadUsers(): void {
     this.loading = true;
@@ -58,33 +62,11 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  loadRoles(): void {
-    this.userService.getAllRoles().subscribe({
-      next: (roles) => {
-        this.roles = roles.map(role => ({
-          id: role.id,
-          roleName: role.roleName
-        }));
-        if (this.selectedUser) {
-          this.patchForm(this.selectedUser);
-        }
-      },
-      error: err => {
-        console.error('Error fetching roles', err);
-        alert('Failed to load roles.');
-      }
-    });
-  }
-
   openEditModal(modal: TemplateRef<any>, user: User): void {
     this.userService.getUserById(user.id).subscribe({
       next: (userData) => {
         this.selectedUser = userData;
-        if (this.roles.length > 0) {
-          this.patchForm(userData);
-        } else {
-          this.loadRoles();  // roles will patch form after loaded
-        }
+        this.patchForm(userData);
         this.modalService.open(modal, { centered: true });
       },
       error: (err) => {
@@ -99,7 +81,7 @@ export class UserManagementComponent implements OnInit {
       name: userData.name,
       email: userData.email,
       accountStatus: userData.account_status,
-      idRole: userData.role?.id ? String(userData.role.id) : '',
+      idRole: userData.role?.id || ''
     });
   }
 
@@ -114,18 +96,12 @@ export class UserManagementComponent implements OnInit {
     }
 
     const formValue = this.userEditForm.getRawValue();
-
-    console.log('Form raw values:', formValue);
-    console.log('idRole as number:', Number(formValue.idRole));
-
     const payload = {
       name: formValue.name,
       email: formValue.email,
       account_status: formValue.accountStatus,
-      idRole: Number(formValue.idRole),  // convert string to number explicitly
+      idRole: formValue.idRole
     };
-
-    console.log('Payload to send:', payload);
 
     if (this.selectedUser) {
       this.loading = true;
@@ -148,7 +124,6 @@ export class UserManagementComponent implements OnInit {
       alert('No user selected for editing.');
     }
   }
-
 
   softDeleteUser(userId: string): void {
     if (confirm('Are you sure you want to delete this user?')) {
@@ -183,11 +158,6 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-  // Pagination methods
-
-  currentPage = 1;
-  itemsPerPage = 20;
-
   get paginatedUsers(): User[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     return this.users.slice(startIndex, startIndex + this.itemsPerPage);
@@ -202,21 +172,22 @@ export class UserManagementComponent implements OnInit {
       this.currentPage = page;
     }
   }
-    nextPage(): void {
-      if (this.currentPage < this.totalPages()) {
-        this.currentPage++;
-      }
-    }
 
-    previousPage(): void {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
-    }
-
-    goToPage(page: number): void {
-      if (page >= 1 && page <= this.totalPages()) {
-        this.currentPage = page;
-      }
+  nextPage(): void {
+    if (this.currentPage < this.totalPages()) {
+      this.currentPage++;
     }
   }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage = page;
+    }
+  }
+}
