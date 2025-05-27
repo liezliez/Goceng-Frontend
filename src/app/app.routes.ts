@@ -5,6 +5,8 @@ import { AuthGuard } from './services/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+
 
 export const routes: Routes = [
 
@@ -13,13 +15,15 @@ export const routes: Routes = [
 
   { path: 'unauthorized', component: UnauthorizedComponent },
 
-  // Redirect to landing page for unauthorized access
 
   // Optional alias
   { path: 'landing', redirectTo: '', pathMatch: 'full' },
 
   // Login
   { path: 'login', component: LoginComponent },
+
+  // Reset Password
+   { path: 'reset-password', component: ResetPasswordComponent },
 
   // Authenticated routes
   {
