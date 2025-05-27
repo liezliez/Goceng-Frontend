@@ -8,6 +8,8 @@ import { ApplicationResponse } from '../../models/application-response.model';
 import { CustomerResponse } from '../../models/customer-response.model';
 import { CustomerService } from '../../services/customer.service';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-application-approval',
@@ -15,9 +17,11 @@ import { PaginationComponent } from '../../shared/pagination/pagination.componen
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     NgbModalModule,
     PaginationComponent
   ],
+
   templateUrl: './application-approval.component.html',
 })
 export class ApplicationApprovalComponent implements OnInit {
@@ -43,6 +47,30 @@ export class ApplicationApprovalComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 5;
 
+  filter = {
+    customerName: '',
+    purpose: '',
+    status: ''
+  };
+
+  filteredApplications: ApplicationResponse[] = [];
+
+  applyFilters(): void {
+    const { customerName, purpose, status } = this.filter;
+    this.filteredApplications = this.applications.filter(app =>
+      (customerName === '' || app.customerName.toLowerCase().includes(customerName.toLowerCase())) &&
+      (purpose === '' || app.purpose.toLowerCase().includes(purpose.toLowerCase())) &&
+      (status === '' || app.status === status)
+    );
+    this.currentPage = 1;
+  }
+
+  get paginatedFilteredApplications(): ApplicationResponse[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredApplications.slice(start, start + this.itemsPerPage);
+  }
+
+
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
     this.loadApplications();
@@ -52,8 +80,10 @@ export class ApplicationApprovalComponent implements OnInit {
     this.appService.getApplicationsByCurrentUserBranch()
       .subscribe((apps: ApplicationResponse[]) => {
         this.applications = apps;
+        this.applyFilters();
       });
   }
+
 
   openReviewModal(content: TemplateRef<any>): void {
     this.modalInstance = this.modalService.open(content, { size: 'lg' });
