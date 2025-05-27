@@ -1,11 +1,88 @@
-.card {
+// Colors
+$bg-gradient-start: #f3f4f6;
+$bg-gradient-end: #e2e8f0;
+$primary-color: #1a73e8;
+$text-dark: #1f2937;
+$text-muted: #6b7280;
+$caption-bg: rgba(255, 255, 255, 0.85);
+
+// Gradient Background for Page
+.gradient-custom {
+  background: linear-gradient(to right, $bg-gradient-start, $bg-gradient-end);
+  min-height: 100vh;
+}
+
+// Login Card Styling
+.login-card {
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  color: $text-dark;
   transition: transform 0.2s ease;
+
   &:hover {
     transform: scale(1.02);
   }
+
+  .form-control {
+    background-color: #f9fafb;
+    border: 1px solid #d1d5db;
+    color: $text-dark;
+
+    &:focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+    }
+  }
+
+  .form-label {
+    color: $text-muted;
+  }
+
+  button[type="submit"] {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
 }
 
-.carousel-item blockquote {
-  font-size: 1.1rem;
-  font-style: italic;
+// Carousel
+.carousel {
+  .carousel-item {
+    position: relative;
+
+    blockquote {
+      font-size: 1.2rem;
+      font-style: italic;
+      color: $text-dark;
+    }
+
+    .carousel-caption {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      background-color: $caption-bg;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      color: $text-dark;
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+
+      h5 {
+        font-weight: 600;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+    }
+  }
 }

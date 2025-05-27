@@ -1,0 +1,76 @@
+// New modern gradient colors
+$gradient-start: #0852e7;
+$gradient-end: #e2e8f0;
+// Colors
+$primary-color: #1a73e8;
+$text-dark: #1f2937;
+$text-muted: #6b7280;
+$caption-bg: rgba(255, 255, 255, 0.85);
+
+// Theme colors
+$card-bg: #ffffff;
+$text-color: #333;
+$label-color: #666;
+$border-color: #ccc;
+$input-bg: #f8f9fa;
+$input-focus-border: #1a73e8;
+$button-bg: #1a73e8;
+$button-hover-bg: #1558b0;
+$button-text: #fff;
+
+.gradient-custom {
+  background: $gradient-start;
+  background: -webkit-linear-gradient(to right, $gradient-start, $gradient-end);
+  background: linear-gradient(to right, $gradient-start, $gradient-end);
+}
+
+.login-card {
+  border-radius: 1rem;
+  background-color: $card-bg;
+  color: $text-color;
+
+  .form-outline {
+    .form-control {
+      &.form-control-lg {
+        background-color: $input-bg;
+        color: $text-color;
+        border: 1px solid $border-color;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+        &:focus {
+          border-color: $input-focus-border;
+          box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+        }
+      }
+    }
+
+    .form-label {
+      color: $label-color;
+    }
+  }
+
+  a {
+    &.text-white-50,
+    &.text-white {
+      color: $label-color;
+
+      &:hover {
+        color: $text-color;
+      }
+    }
+  }
+
+  button[type='submit'] {
+    background-color: $button-bg;
+    color: $button-text;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $button-hover-bg;
+    }
+  }
+}

@@ -37,21 +37,21 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/user/create-user/create-user.component').then(m => m.CreateUserComponent),
         canActivate: [RoleGuard],
-        data: { roles: ['SUPERADMIN'] }
+        data: { roles: ['ROLE_SUPERADMIN'] }
       },
       {
         path: 'users',
         loadComponent: () =>
           import('./components/user/user-management/user-management.component').then(m => m.UserManagementComponent),
         canActivate: [RoleGuard],
-        data: { roles: ['SUPERADMIN'] }
+        data: { roles: ['ROLE_SUPERADMIN'] }
       },
       {
         path: 'approval',
         loadComponent: () =>
           import('./components/application-approval/application-approval.component').then(m => m.ApplicationApprovalComponent),
         canActivate: [RoleGuard],
-        data: { roles: ['MARKETING', 'BRANCH_MANAGER', 'BACK_OFFICE', 'SUPERADMIN'] } // example allowed roles
+        data: { roles: ['ROLE_MARKETING', 'ROLE_BRANCH_MANAGER', 'ROLE_BACK_OFFICE', 'ROLE_SUPERADMIN'] } // example allowed roles
       },
     ],
   },
