@@ -18,7 +18,7 @@ export const FEATURE_BASED_MENU: MenuItem[] = [
     label: 'Manage Users',
     icon: 'bi-people',
     route: '/users',
-    feature: 'VIEW_ALL_USERS'  // If your userFeatures has 'VIEW_ALL_USERS' instead of 'MANAGE_USERS', update this here.
+    feature: 'MANAGE_USERS'  // If your userFeatures has 'VIEW_ALL_USERS' instead of 'MANAGE_USERS', update this here.
   },
   {
     label: 'Approval',
