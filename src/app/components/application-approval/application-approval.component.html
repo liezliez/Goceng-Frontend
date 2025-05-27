@@ -110,195 +110,165 @@
 
 <!-- Review Modal -->
 <ng-template #reviewModal let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title">
-      Review Application: <strong>{{ selectedApp?.customerName }}</strong>
+  <div class="modal-header bg-light border-bottom-0">
+    <h5 class="modal-title text-primary">
+      Review Application:
+      <ng-container *ngIf="selectedApp?.customerName; else noCustomerName">
+        <strong>{{ selectedApp?.customerName }}</strong>
+      </ng-container>
+      <ng-template #noCustomerName>-</ng-template>
     </h5>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>
 
-  <div class="modal-body">
-    <div class="row g-3">
-      <!-- Left Column: Customer Details -->
+  <div class="modal-body bg-white">
+    <div class="row g-4">
+      <!-- Customer Details -->
       <div class="col-md-6">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-secondary text-white fw-bold">Customer Details</div>
-          <div class="card-body" *ngIf="selectedCustomer?.idCustomer">
-            <div class="row gy-2">
+        <div class="card rounded-4 border-0 shadow-sm">
+          <div class="card-header bg-secondary text-white fw-bold rounded-top">
+            Customer Details
+          </div>
+          <div class="card-body small" *ngIf="selectedCustomer?.idCustomer">
+            <ng-container *ngFor="let field of [
+              {label: 'Name', value: selectedCustomer?.name},
+              {label: 'NIK', value: selectedCustomer?.nik},
+              {label: 'Phone', value: selectedCustomer?.telpNo},
+              {label: 'DOB', value: (selectedCustomer?.dateOfBirth | date)},
+              {label: 'POB', value: selectedCustomer?.placeOfBirth},
+              {label: 'Address', value: selectedCustomer?.address},
+              {label: 'Mother\'s Maiden Name', value: selectedCustomer?.motherMaidenName},
+              {label: 'Occupation', value: selectedCustomer?.occupation},
+              {label: 'Salary', value: (selectedCustomer?.salary | currency:'IDR')},
+              {label: 'Home Ownership', value: selectedCustomer?.homeOwnershipStatus},
+              {label: 'Emergency Call', value: selectedCustomer?.emergencyCall},
+              {label: 'Credit Limit', value: (selectedCustomer?.creditLimit | currency:'IDR')},
+              {label: 'Account No', value: selectedCustomer?.accountNo}
+            ]">
               <div class="row mb-2">
-                <div class="col-sm-4 fw-semibold text-muted">Name:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.name }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">NIK:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.nik }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Phone:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.telpNo }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">DOB:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.dateOfBirth | date }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">POB:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.placeOfBirth }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Address:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.address }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Mother's Maiden Name:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.motherMaidenName }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Occupation:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.occupation }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Salary:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.salary | currency:'IDR':'symbol':'1.0-0' }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Home Ownership:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.homeOwnershipStatus }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Emergency Call:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.emergencyCall }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Credit Limit:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.creditLimit | currency:'IDR':'symbol':'1.0-0' }}</div>
-
-                <div class="col-sm-4 fw-semibold text-muted">Account No:</div>
-                <div class="col-sm-8">{{ selectedCustomer?.accountNo }}
-
-                </div>
+                <div class="col-5 text-muted fw-semibold">{{ field.label }}:</div>
+                <div class="col-7">{{ field.value || '-' }}</div>
               </div>
-            </div>
-
-
+            </ng-container>
 
             <div class="mt-3">
-              <strong>KTP Image:</strong><br />
-              <img *ngIf="selectedCustomer?.urlKtp" [src]="selectedCustomer?.urlKtp" alt="KTP Image"
-                class="img-fluid rounded border" style="max-height: 180px;" />
+              <strong class="text-muted">KTP Image:</strong><br />
+              <img *ngIf="selectedCustomer?.urlKtp" [src]="selectedCustomer?.urlKtp"
+                class="img-fluid rounded border mt-1" style="max-height: 160px;" />
             </div>
 
             <div class="mt-3">
-              <strong>Selfie:</strong><br />
-              <img *ngIf="selectedCustomer?.urlSelfie" [src]="selectedCustomer?.urlSelfie" alt="Selfie"
-                class="img-fluid rounded border" style="max-height: 180px;" />
+              <strong class="text-muted">Selfie:</strong><br />
+              <img *ngIf="selectedCustomer?.urlSelfie" [src]="selectedCustomer?.urlSelfie"
+                class="img-fluid rounded border mt-1" style="max-height: 160px;" />
             </div>
           </div>
         </div>
-
       </div>
-  <!-- Right Column: Application Details -->
+
+      <!-- Application Details -->
       <div class="col-md-6">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-primary text-white fw-bold">Application Details</div>
-          <div class="card-body">
-            <div class="row gy-2">
-              <div class="col-sm-4 fw-semibold text-muted">Customer Name:</div>
-              <div class="col-sm-8">{{ selectedApp?.customerName }}</div>
+        <div class="card rounded-4 border-0 shadow-sm">
+          <div class="card-header bg-primary text-white fw-bold rounded-top">
+            Application Details
+          </div>
+          <div class="card-body small">
+            <ng-container *ngIf="selectedApp; else noSelectedApp">
+              <ng-container *ngFor="let field of [
+                {label: 'Customer Name', value: selectedApp.customerName || '-'},
+                {label: 'Amount', value: (selectedApp.amount != null ? (selectedApp.amount | currency:'IDR') : '-')},
+                {label: 'Purpose', value: selectedApp.purpose || '-'},
+                {label: 'Status', value: selectedApp.status || '-'},
+                {label: 'Tenor', value: selectedApp.tenor != null ? selectedApp.tenor : '-'},
+                {
+                  label: 'Limit',
+                  value: (selectedApp.limitType || '-') +
+                    (selectedApp.limitAmount != null ? (' - ' + (selectedApp.limitAmount | currency:'IDR')) : '')
+                }
+              ]">
+                <div class="row mb-2">
+                  <div class="col-5 text-muted fw-semibold">{{ field.label }}:</div>
+                  <div class="col-7">{{ field.value }}</div>
+                </div>
+              </ng-container>
 
-              <div class="col-sm-4 fw-semibold text-muted">Amount:</div>
-              <div class="col-sm-8">{{ selectedApp?.amount | currency:'IDR':'symbol':'1.0-0' }}</div>
-
-              <div class="col-sm-4 fw-semibold text-muted">Purpose:</div>
-              <div class="col-sm-8">{{ selectedApp?.purpose }}</div>
-
-              <div class="col-sm-4 fw-semibold text-muted">Status:</div>
-              <div class="col-sm-8">{{ selectedApp?.status }}</div>
-
-              <div class="col-sm-4 fw-semibold text-muted">Tenor:</div>
-              <div class="col-sm-8">{{ selectedApp?.tenor ?? '-' }}</div>
-
-              <div class="col-sm-4 fw-semibold text-muted">Limit:</div>
-              <div class="col-sm-8">
-                {{ selectedApp?.limitType ?? '-' }}
-                <span *ngIf="selectedApp?.limitAmount != null"> - {{ selectedApp?.limitAmount | currency:'IDR':'symbol':'1.0-0' }}</span>
+              <div class="row mb-2">
+                <div class="col-5 text-muted fw-semibold">Interest Rate:</div>
+                <div class="col-7">
+                  <ng-container *ngIf="selectedApp.interestRate != null; else noInterestRate">
+                    {{ (selectedApp.interestRate * 100) + '%' }}
+                  </ng-container>
+                  <ng-template #noInterestRate>-</ng-template>
+                </div>
               </div>
 
-              <div class="col-sm-4 fw-semibold text-muted">Interest Rate:</div>
-              <div class="col-sm-8">
-                {{ selectedApp?.interestRate != null ? (selectedApp?.interestRate! * 100) + '%' : '-' }}
-              </div>
-
-              <div class="col-sm-4 fw-semibold text-muted">Created At:</div>
-              <div class="col-sm-8">{{ selectedApp?.createdAt | date: 'short' }}</div>
-
-              <div class="col-sm-4 fw-semibold text-muted">Updated At:</div>
-              <div class="col-sm-8">{{ selectedApp?.updatedAt | date: 'short' }}</div>
-            </div>
+              <ng-container *ngFor="let field of [
+                {label: 'Created At', value: (selectedApp.createdAt | date:'short') || '-'},
+                {label: 'Updated At', value: (selectedApp.updatedAt | date:'short') || '-'}
+              ]">
+                <div class="row mb-2">
+                  <div class="col-5 text-muted fw-semibold">{{ field.label }}:</div>
+                  <div class="col-7">{{ field.value }}</div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-template #noSelectedApp>-</ng-template>
           </div>
         </div>
       </div>
     </div>
-    <!-- Notes & Decision Form (below two-column layout) -->
+
+    <!-- Notes -->
     <div class="mt-4">
-      <!-- Approval Notes -->
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">Approval Notes</h5>
-          <div class="mb-2"><strong>Marketing:</strong> <p [style.color]="selectedApp?.noteMarketing ? 'red' : 'grey'">{{ selectedApp?.noteMarketing || 'No note provided.' }}</p></div>
-          <div class="mb-2"><strong>Branch Manager:</strong> <p [style.color]="selectedApp?.noteBranchManager ? 'red' : 'grey'">{{ selectedApp?.noteBranchManager || 'No note provided.' }}</p></div>
-          <div class="mb-2"><strong>Back Office:</strong> <p [style.color]="selectedApp?.noteBackOffice ? 'red' : 'grey'">{{ selectedApp?.noteBackOffice || 'No note provided.' }}</p></div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-body bg-light">
+          <h6 class="fw-bold text-muted">Approval Notes</h6>
+          <div class="mb-2">
+            <strong>Marketing:</strong>
+            <p class="mb-0 text-secondary">{{ selectedApp?.noteMarketing || 'No note provided.' }}</p>
+          </div>
+          <div class="mb-2">
+            <strong>Branch Manager:</strong>
+            <p class="mb-0 text-secondary">{{ selectedApp?.noteBranchManager || 'No note provided.' }}</p>
+          </div>
+          <div class="mb-2">
+            <strong>Back Office:</strong>
+            <p class="mb-0 text-secondary">{{ selectedApp?.noteBackOffice || 'No note provided.' }}</p>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Approval Form -->
-      <div class="card border-0 shadow-sm">
-        <div class="card-header bg-success text-white fw-bold">Your Decision</div>
-        <div class="card-body">
-          <form [formGroup]="form">
-            <div class="mb-3">
-              <label for="modalNote" class="form-label">Your Note</label>
-              <textarea
-                formControlName="note"
-                id="modalNote"
-                class="form-control"
-                rows="3"
-                placeholder="Enter your approval or rejection note..."
-              ></textarea>
-            </div>
+    <!-- Form -->
+    <div class="card border-0 shadow-sm mt-3">
+      <div class="card-header bg-success text-white fw-bold">Your Decision</div>
+      <div class="card-body">
+        <form [formGroup]="form">
+          <div class="mb-3">
+            <label for="modalNote" class="form-label">Your Note</label>
+            <textarea formControlName="note" id="modalNote" class="form-control" rows="3"
+              placeholder="Enter your approval or rejection note..."></textarea>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label me-3">Decision:</label>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="isApproved" [value]="true" id="modalApproveYes" />
-                <label class="form-check-label" for="modalApproveYes">Approve</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="isApproved" [value]="false" id="modalApproveNo" />
-                <label class="form-check-label" for="modalApproveNo">Reject</label>
-              </div>
+          <div class="mb-3">
+            <label class="form-label me-3">Decision:</label>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="isApproved" [value]="true" id="modalApproveYes" />
+              <label class="form-check-label" for="modalApproveYes">Approve</label>
             </div>
-          </form>
-        </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="isApproved" [value]="false" id="modalApproveNo" />
+              <label class="form-check-label" for="modalApproveNo">Reject</label>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 
-
-
-  <div class="modal-footer">
-    <button
-      *ngIf="userRole === 'MARKETING'"
-      type="button"
-      class="btn btn-primary"
-      (click)="approve(); modal.close()"
-    >
-      Submit as Marketing
-    </button>
-    <button
-      *ngIf="userRole === 'BRANCH_MANAGER'"
-      type="button"
-      class="btn btn-primary"
-      (click)="approve(); modal.close()"
-    >
-      Submit as Branch Manager
-    </button>
-    <button
-      *ngIf="userRole === 'BACK_OFFICE'"
-      type="button"
-      class="btn btn-primary"
-      (click)="approve(); modal.close()"
-    >
-      Submit as Back Office
-    </button>
+  <div class="modal-footer bg-light">
+    <button *ngIf="userRole === 'MARKETING'" class="btn btn-primary" (click)="approve(); modal.close()">Submit as Marketing</button>
+    <button *ngIf="userRole === 'BRANCH_MANAGER'" class="btn btn-primary" (click)="approve(); modal.close()">Submit as Branch Manager</button>
+    <button *ngIf="userRole === 'BACK_OFFICE'" class="btn btn-primary" (click)="approve(); modal.close()">Submit as Back Office</button>
   </div>
 </ng-template>
