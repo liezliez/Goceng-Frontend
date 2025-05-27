@@ -172,4 +172,10 @@ export class ApplicationApprovalComponent implements OnInit {
       }
     });
   }
+
+  getInterestRateDisplay(): string {
+    if (!this.selectedApp || this.selectedApp.interestRate == null) return '-';
+    return (this.selectedApp.interestRate * 100) + '%';
+  }
+
 }
