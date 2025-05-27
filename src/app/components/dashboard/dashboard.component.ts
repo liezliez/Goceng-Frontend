@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { HttpClient } from '@angular/common/http';
+import { UserService } from '../../services/user.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +17,38 @@ export class DashboardComponent implements OnInit {
     { title: 'Customer Support Hours', description: 'Our customer support team is available 24/7 to assist you.' },
   ];
 
-  constructor() {}
+  totalUsers: number = 0;
+  totalApplications: number = 0;
 
-  ngOnInit(): void {}
+  constructor(private userService: UserService, private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.userService.getUserProfile().subscribe({
+      next: (user) => {
+        const branchId = user.branch?.id;
+        if (!branchId) {
+          console.error('Branch ID not found on user profile');
+          return;
+        }
+
+        this.loadBranchSummary(branchId);
+      },
+      error: (err) => {
+        console.error('Failed to load user profile', err);
+      }
+    });
+  }
+
+  loadBranchSummary(branchId: string): void {
+    this.http.get<any>(`${environment.apiUrl}/dashboard/branch-summary?branchId=${branchId}`)
+      .subscribe({
+        next: (data) => {
+          this.totalUsers = data.totalUsers;
+          this.totalApplications = data.totalApplications;
+        },
+        error: (err) => {
+          console.error('Failed to load dashboard summary', err);
+        }
+      });
+  }
 }
