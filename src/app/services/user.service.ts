@@ -1,18 +1,19 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
+import { Branch } from '../models/branch.model';
 import { ROLES } from '../components/constants/roles';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private readonly baseUrl = `${environment.apiUrl}/users`;
+  private readonly branchUrl = `${environment.apiUrl}/branches`;
+  private readonly rolesUrl = `${environment.apiUrl}/roles`;
 
   constructor(private http: HttpClient) {}
 
@@ -31,6 +32,7 @@ export class UserService {
     const user = this.getCurrentUser();
     return user?.branch?.name ?? null;
   }
+
   getUserRole(): string | null {
     const user = this.getCurrentUser();
     return user?.role?.roleName ?? null;
@@ -84,19 +86,16 @@ export class UserService {
     return this.http.put(`${this.baseUrl}/id/${userId}/edit`, userData);
   }
 
-
   createUser(userData: any, branchId: string): Observable<any> {
     return this.http.post(`${this.baseUrl}`, userData, {
       params: { branchId }
     });
   }
 
-  getAllBranches(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/branches`);
-  }
+getAllBranches(): Observable<Branch[]> {
+  return this.http.get<Branch[]>(`${environment.apiUrl}/branches`);
+}
 
-
-  // New: Superadmin creates employee (role = EMPLOYEE)
   createEmployeeWithRole(role: string, employeeData: {
     name: string;
     email: string;
@@ -105,7 +104,7 @@ export class UserService {
   }): Observable<any> {
     const payload = {
       ...employeeData,
-      role // role is passed from the component as a string like ROLES.SUPERADMIN etc.
+      role
     };
 
     const options = employeeData.branchId
@@ -115,8 +114,7 @@ export class UserService {
     return this.http.post(`${this.baseUrl}`, payload, options);
   }
 
-
-  getAllRoles(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/roles`);
+  getAllRoles(): Observable<{ id: number; roleName: string }[]> {
+    return this.http.get<{ id: number; roleName: string }[]>(this.rolesUrl);
   }
 }

@@ -3,18 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
 import { ROLES } from '../../constants/roles';
-
-interface Branch {
-  id: string;
-  name: string;
-  address: string;
-  city: string;
-  province: string;
-  latitude: number;
-  longitude: number;
-  childBranches: Branch[];
-}
-
+import { Branch } from '../../../models/branch.model';
 @Component({
   selector: 'app-create-user',
   standalone: true,

@@ -1,22 +1,25 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.model';
+import { Branch } from '../../../models/branch.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { ROLES } from '../../constants/roles';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgbModalModule]
+  imports: [CommonModule, ReactiveFormsModule, NgbModalModule, FormsModule]
 })
 export class UserManagementComponent implements OnInit {
   users: User[] = [];
+  filteredUsers: User[] = [];
   selectedUser: User | null = null;
+  searchText: string = '';
   userEditForm: FormGroup;
   roles = [
     { id: 1, roleName: 'ROLE_SUPERADMIN' },
@@ -25,6 +28,7 @@ export class UserManagementComponent implements OnInit {
     { id: 3, roleName: 'ROLE_MARKETING' },
     { id: 2, roleName: 'ROLE_CUSTOMER' }
   ];
+  branches: Branch[] = [];
 
   loading = false;
   currentPage = 1;
@@ -39,12 +43,14 @@ export class UserManagementComponent implements OnInit {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       accountStatus: ['', Validators.required],
-      idRole: ['', Validators.required]
+      idRole: ['', Validators.required],
+      branchId: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadBranches();
   }
 
   loadUsers(): void {
@@ -52,6 +58,7 @@ export class UserManagementComponent implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (data: User[]) => {
         this.users = data;
+        this.filteredUsers = data;
         this.loading = false;
       },
       error: err => {
@@ -60,6 +67,23 @@ export class UserManagementComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  loadBranches(): void {
+    this.userService.getAllBranches().subscribe({
+      next: (branches: Branch[]) => this.branches = branches,
+      error: err => console.error(err)
+    });
+  }
+
+  applyFilter(): void {
+    const keyword = this.searchText.toLowerCase().trim();
+    this.filteredUsers = this.users.filter(user =>
+      user.name.toLowerCase().includes(keyword) ||
+      user.email.toLowerCase().includes(keyword) ||
+      (user.role?.roleName?.toLowerCase().includes(keyword) ?? false)
+    );
+    this.currentPage = 1;
   }
 
   openEditModal(modal: TemplateRef<any>, user: User): void {
@@ -81,7 +105,8 @@ export class UserManagementComponent implements OnInit {
       name: userData.name,
       email: userData.email,
       accountStatus: userData.account_status,
-      idRole: userData.role?.id || ''
+      idRole: userData.role?.id || '',
+      branchId: userData.branch?.id || ''
     });
   }
 
@@ -100,7 +125,8 @@ export class UserManagementComponent implements OnInit {
       name: formValue.name,
       email: formValue.email,
       account_status: formValue.accountStatus,
-      idRole: formValue.idRole
+      idRole: formValue.idRole,
+      id_branch: formValue.branchId
     };
 
     if (this.selectedUser) {
@@ -160,11 +186,11 @@ export class UserManagementComponent implements OnInit {
 
   get paginatedUsers(): User[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.users.slice(startIndex, startIndex + this.itemsPerPage);
+    return this.filteredUsers.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
   totalPages(): number {
-    return Math.ceil(this.users.length / this.itemsPerPage);
+    return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
   }
 
   changePage(page: number): void {
