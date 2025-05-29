@@ -57,7 +57,7 @@ export class ChangePasswordComponent implements OnInit {
       newPassword: this.changeForm.get('newPassword')?.value
     };
 
-    this.http.post(
+    this.http.put(
       `${environment.apiUrl}/users/change-password`,
       formData,
       {
@@ -72,7 +72,7 @@ export class ChangePasswordComponent implements OnInit {
       error: err => {
         this.errorMessage = err.error?.message || 'Failed to change password.';
       }
-    });
+    })
   }
 
 }

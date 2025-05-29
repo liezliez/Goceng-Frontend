@@ -12,9 +12,9 @@ import { environment } from '../../../environments/environment';
 })
 export class DashboardComponent implements OnInit {
   news = [
-    { title: 'New Loan Application System', description: 'We have updated our loan application process for a better experience.' },
-    { title: 'Feature Release: Auto Repayment', description: 'The new auto repayment feature is now available to all users.' },
-    { title: 'Customer Support Hours', description: 'Our customer support team is available 24/7 to assist you.' },
+    { title: 'Migrasi core system telah selesai', description: 'Kami beritahukan bahwa proses migrasi telah dilaksanakan oleh tim IT.' },
+    { title: 'Feature baru: Auto Disburse', description: 'Disbursed telah bisa dilakukan secara otomatis.' },
+    { title: 'Ganti password Juni', description: 'Jangan terlewat untuk mengganti password periode Juni 2025.' },
   ];
 
   totalUsers: number = 0;
