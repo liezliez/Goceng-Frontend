@@ -1,15 +1,14 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { HttpRequest, HttpHandlerFn } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 export const AuthInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
-): Observable<any> => {
+): Observable<HttpEvent<unknown>> => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -18,7 +17,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
   if (token && authService.isTokenExpired()) {
     authService.logout();
     router.navigate(['/login']);
-    return throwError(() => new Error('Token expired'));
+    return EMPTY;  // stop the HTTP request stream here
   }
 
   const authReq = token
@@ -35,5 +34,3 @@ export const AuthInterceptor: HttpInterceptorFn = (
     })
   );
 };
-//         this.clearStorage();
-//         this.router.navigate(['/login']);  

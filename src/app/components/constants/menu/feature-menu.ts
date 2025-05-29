@@ -18,7 +18,7 @@ export const FEATURE_BASED_MENU: MenuItem[] = [
     label: 'Manage Users',
     icon: 'bi-people',
     route: '/users',
-    feature: 'MANAGE_USERS' 
+    feature: 'MANAGE_USERS'
   },
   {
     label: 'Approval',
@@ -30,7 +30,12 @@ export const FEATURE_BASED_MENU: MenuItem[] = [
     label: 'Create User',
     icon: 'bi-person-plus',
     route: '/users/create',
-    feature: 'CREATE_USER' 
+    feature: 'CREATE_USER'
+  },
+  {
+    label: 'Change Password',
+    icon: 'bi-key',
+    route: '/change-password',
+    feature: 'CHANGE_PASSWORD'
   }
-  // other items
 ];
