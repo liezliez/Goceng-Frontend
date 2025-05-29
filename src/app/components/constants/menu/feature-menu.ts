@@ -33,6 +33,12 @@ export const FEATURE_BASED_MENU: MenuItem[] = [
     feature: 'CREATE_USER'
   },
   {
+    label: 'Branch Management',
+    icon: 'bi-building',
+    route: '/branch-management',
+    feature: 'MANAGE_BRANCHES'
+  },
+  {
     label: 'Change Password',
     icon: 'bi-key',
     route: '/change-password',

@@ -44,7 +44,7 @@
                       (click)="openEditModal(editModal, user)">
                       <i class="bi bi-pencil-fill"></i> Edit
                     </button>
-                    <!-- <button
+                    <button
                       *ngIf="user.account_status === 'ACTIVE'"
                       class="btn btn-danger btn-sm rounded-pill px-3 py-1"
                       (click)="softDeleteUser(user.id)">
@@ -55,7 +55,7 @@
                       class="btn btn-success btn-sm rounded-pill px-3 py-1"
                       (click)="restoreUser(user.id)">
                       <i class="bi bi-arrow-repeat"></i> Restore
-                    </button> -->
+                    </button>
                   </td>
                 </tr>
               </tbody>

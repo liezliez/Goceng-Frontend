@@ -33,17 +33,12 @@ export class LoginComponent {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        console.error('Login error:', err);
-
-        // Check if it's the wrapped format from your backend
         if (err?.status === 401 && err.error?.message) {
           this.error = err.error.message;
         } else if (err?.error) {
-          // If error is a plain string
           if (typeof err.error === 'string') {
             this.error = err.error;
           }
-          // If error has a nested message
           else if (typeof err.error === 'object') {
             this.error = err.error.message || 'Login failed. Please try again.';
           } else {

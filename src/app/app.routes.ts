@@ -6,24 +6,20 @@ import { RoleGuard } from './guards/role.guard';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { BranchManagementComponent } from './components/branch-management/branch-management.component';
 
 export const routes: Routes = [
 
-  // Public root route (Landing Page)
   { path: '', component: LandingPageComponent },
 
   { path: 'unauthorized', component: UnauthorizedComponent },
 
-  // Optional alias
   { path: 'landing', redirectTo: '', pathMatch: 'full' },
 
-  // Login
   { path: 'login', component: LoginComponent },
 
-  // Reset Password
   { path: 'reset-password', component: ResetPasswordComponent },
 
-  // Authenticated routes
   {
     path: '',
     component: MainLayoutComponent,
@@ -56,6 +52,12 @@ export const routes: Routes = [
         data: { roles: ['ROLE_MARKETING', 'ROLE_BRANCH_MANAGER', 'ROLE_BACK_OFFICE', 'ROLE_SUPERADMIN'] }
       },
       {
+        path: 'branch-management',
+        component: BranchManagementComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['ROLE_SUPERADMIN'] }
+      },
+      {
         path: 'change-password',
         loadComponent: () =>
           import('./components/change-password/change-password.component').then(m => m.ChangePasswordComponent)
@@ -63,6 +65,5 @@ export const routes: Routes = [
     ],
   },
 
-  // Catch-all
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
