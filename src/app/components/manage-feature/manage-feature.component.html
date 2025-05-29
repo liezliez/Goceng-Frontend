@@ -1,57 +1,87 @@
 <div class="dashboard-background">
   <div class="dashboard-container px-3 py-2">
-    <div class="card shadow-lg rounded-4 border-0 bg-white max-w-xl mx-auto">
-      <div class="card-body px-4 py-6">
-        <h2 class="text-2xl font-semibold mb-6">Manage Role Features</h2>
+    <div class="card shadow-lg rounded-4 border-0 bg-white max-w-6xl mx-auto">
+      <div class="card-body px-4 py-4">
+        <h2 class="text-center fw-semibold mb-4">Manage Role Features</h2>
 
-        <form [formGroup]="featureForm" class="grid gap-4">
-          <input
-            type="text"
-            formControlName="roleName"
-            placeholder="Role Name"
-            class="p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            formControlName="featureName"
-            placeholder="Feature Name"
-            class="p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
-          <div class="flex gap-3">
-            <button
-              type="button"
-              (click)="assignFeature()"
-              class="px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-            >
-              Assign
-            </button>
-            <button
-              type="button"
-              (click)="removeFeature()"
-              class="px-5 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-            >
-              Remove
-            </button>
-            <button
-              type="button"
-              (click)="checkFeature()"
-              class="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-            >
-              Check
-            </button>
-          </div>
+        <!-- Role Selector -->
+        <form [formGroup]="featureForm" class="mb-4 d-flex justify-content-center">
+          <select class="form-select w-auto" formControlName="roleName" (change)="onRoleChange()">
+            <option value="" disabled selected>Select Role</option>
+            <option *ngFor="let role of roleList()" [value]="role">{{ role }}</option>
+          </select>
         </form>
 
-        <div class="mt-5 text-sm text-gray-700" *ngIf="resultMessage()">
-          {{ resultMessage() }}
+        <div *ngIf="loading()" class="mb-3 text-center text-secondary">Loading...</div>
+
+        <!-- Features Grid -->
+        <div class="d-flex gap-4" *ngIf="!loading()">
+          <!-- Assigned Features -->
+          <div class="flex-grow-1">
+            <h5 class="fw-semibold mb-2">Assigned Features</h5>
+            <ng-container *ngIf="assignedFeatures().length; else noAssigned">
+              <table class="table table-bordered table-hover mb-0">
+                <thead class="table-light">
+                  <tr><th>Feature</th></tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let feature of assignedFeatures()"
+                      (click)="selectFeature(feature, 'assigned')"
+                      [class.table-primary]="selectedFeature === feature && selectedTable === 'assigned'"
+                      style="cursor: pointer;">
+                    <td>{{ feature }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
+            <ng-template #noAssigned>
+              <p class="fst-italic text-muted">No features assigned.</p>
+            </ng-template>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-flex flex-column justify-content-center align-items-center gap-3">
+            <button type="button" class="btn btn-outline-danger"
+              (click)="removeFeature()"
+              [disabled]="!selectedFeature || selectedTable !== 'assigned' || !featureForm.value.roleName || loading()"
+            >
+              ← Remove
+            </button>
+            <button type="button" class="btn btn-outline-primary"
+              (click)="assignFeature()"
+              [disabled]="!selectedFeature || selectedTable !== 'unassigned' || !featureForm.value.roleName || loading()"
+            >
+              Assign →
+            </button>
+          </div>
+
+          <!-- Unassigned Features -->
+          <div class="flex-grow-1">
+            <h5 class="fw-semibold mb-2">Unassigned Features</h5>
+            <ng-container *ngIf="unassignedFeatures().length; else noUnassigned">
+              <table class="table table-bordered table-hover mb-0">
+                <thead class="table-light">
+                  <tr><th>Feature</th></tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let feature of unassignedFeatures()"
+                      (click)="selectFeature(feature, 'unassigned')"
+                      [class.table-primary]="selectedFeature === feature && selectedTable === 'unassigned'"
+                      style="cursor: pointer;">
+                    <td>{{ feature }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
+            <ng-template #noUnassigned>
+              <p class="fst-italic text-muted">All features assigned.</p>
+            </ng-template>
+          </div>
         </div>
 
-        <div class="mt-8">
-          <h3 class="font-semibold mb-2">Your Features:</h3>
-          <ul class="list-disc ml-6 space-y-1">
-            <li *ngFor="let feature of featureList()">{{ feature }}</li>
-          </ul>
+        <!-- Result Message -->
+        <div class="mt-4 text-center text-secondary" *ngIf="resultMessage()">
+          {{ resultMessage() }}
         </div>
       </div>
     </div>
