@@ -1,11 +1,17 @@
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <div class="card shadow rounded-4 p-4">
-        <h2 class="text-center mb-4">Login to Goceng</h2>
+      <div class="card shadow rounded-4 p-4 text-center">
+        <img 
+          src="assets/dashtrap/images/logo/Logo caption.png" 
+          alt="Goceng Logo" 
+          class="mb-4 mx-auto d-block" 
+          style="max-width: 200px; margin-bottom: -40px; height: auto;"
+        />
+        <h2 class="mb-4">Login to Goceng</h2>
 
         <form (ngSubmit)="onLogin()" novalidate>
-          <div class="mb-3">
+          <div class="mb-3 text-start">
             <label for="email" class="form-label">Email</label>
             <input
               id="email"
@@ -18,7 +24,7 @@
             />
           </div>
 
-          <div class="mb-3">
+          <div class="mb-3 text-start">
             <label for="password" class="form-label">Password</label>
             <input
               id="password"
@@ -31,7 +37,7 @@
             />
           </div>
 
-          <div *ngIf="error" class="alert alert-danger">
+          <div *ngIf="error" class="alert alert-danger" aria-live="polite">
             {{ error }}
           </div>
 

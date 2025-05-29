@@ -1,6 +1,4 @@
-// New modern gradient colors
-$gradient-start: #0852e7;
-$gradient-end: #e2e8f0;
+
 // Colors
 $primary-color: #1a73e8;
 $text-dark: #1f2937;
@@ -17,12 +15,6 @@ $input-focus-border: #1a73e8;
 $button-bg: #1a73e8;
 $button-hover-bg: #1558b0;
 $button-text: #fff;
-
-.gradient-custom {
-  background: $gradient-start;
-  background: -webkit-linear-gradient(to right, $gradient-start, $gradient-end);
-  background: linear-gradient(to right, $gradient-start, $gradient-end);
-}
 
 .login-card {
   border-radius: 1rem;

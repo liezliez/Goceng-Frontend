@@ -21,12 +21,26 @@ export class LoginComponent {
     this.authService.login(this.authRequest).subscribe({
       next: (res) => {
         this.authService.saveUserDetails(res);
-
         this.error = '';
         this.router.navigate(['/dashboard']);
       },
-      error: () => {
-        this.error = 'Invalid login credentials. Please try again.';
+      error: (err) => {
+        if (err?.error) {
+          if (typeof err.error === 'object') {
+            this.error = err.error.message || 
+                         (typeof err.error.errors === 'object' ? 
+                          Object.values(err.error.errors).join(' ') : 
+                          JSON.stringify(err.error));
+          } else if (typeof err.error === 'string') {
+            this.error = err.error;
+          } else {
+            this.error = 'An unknown error occurred.';
+          }
+        } else if (err.message) {
+          this.error = err.message;
+        } else {
+          this.error = 'Invalid login credentials. Please try again.';
+        }
       }
     });
   }

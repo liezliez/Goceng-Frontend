@@ -1,9 +1,9 @@
-<!-- User Management Page Wrapper -->
 <div class="dashboard-background">
   <div class="dashboard-container px-3 py-2">
     <div class="card shadow-lg rounded-4 border-0 bg-white">
       <div class="card-body px-4 py-4">
         <div class="user-management-container">
+
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold mb-0">User Management</h2>
           </div>
@@ -16,7 +16,6 @@
               [(ngModel)]="searchText"
               (ngModelChange)="applyFilter()" />
           </div>
-
 
           <div class="table-responsive">
             <table class="table table-hover align-middle">
@@ -40,13 +39,21 @@
                   <td>{{ user.branch?.name || 'N/A' }}</td>
                   <td>{{ user.account_status }}</td>
                   <td>
-                    <button class="btn btn-warning btn-sm rounded-pill me-2 px-3 py-1" (click)="openEditModal(editModal, user)">
+                    <button
+                      class="btn btn-warning btn-sm rounded-pill me-2 px-3 py-1"
+                      (click)="openEditModal(editModal, user)">
                       <i class="bi bi-pencil-fill"></i> Edit
                     </button>
-                    <button *ngIf="user.account_status === 'ACTIVE'" class="btn btn-danger btn-sm rounded-pill px-3 py-1" (click)="softDeleteUser(user.id)">
+                    <button
+                      *ngIf="user.account_status === 'ACTIVE'"
+                      class="btn btn-danger btn-sm rounded-pill px-3 py-1"
+                      (click)="softDeleteUser(user.id)">
                       <i class="bi bi-trash-fill"></i> Delete
                     </button>
-                    <button *ngIf="user.account_status === 'DELETED'" class="btn btn-success btn-sm rounded-pill px-3 py-1" (click)="restoreUser(user.id)">
+                    <button
+                      *ngIf="user.account_status === 'DELETED'"
+                      class="btn btn-success btn-sm rounded-pill px-3 py-1"
+                      (click)="restoreUser(user.id)">
                       <i class="bi bi-arrow-repeat"></i> Restore
                     </button>
                   </td>
@@ -54,8 +61,6 @@
               </tbody>
             </table>
 
-
-            <!-- Pagination -->
             <nav class="mt-3">
               <ul class="pagination justify-content-center">
                 <li class="page-item" [class.disabled]="currentPage === 1">
@@ -80,7 +85,6 @@
   </div>
 </div>
 
-<!-- Modal for Editing User -->
 <ng-template #editModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
@@ -89,6 +93,7 @@
     </div>
     <div class="modal-body">
       <form [formGroup]="userEditForm">
+
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
           <input id="name" formControlName="name" class="form-control" type="text" required />
@@ -102,8 +107,10 @@
         <div class="mb-3">
           <label for="accountStatus" class="form-label">Status</label>
           <select id="accountStatus" formControlName="accountStatus" class="form-select">
-            <option value="ACTIVE">Active</option>
-            <option value="DELETED">Deleted</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+            <option value="BANNED">BANNED</option>
+            <option value="DELETED">DELETED</option>
           </select>
         </div>
 
@@ -117,25 +124,24 @@
               [value]="role.id"
               formControlName="idRole"
               name="idRole" />
-            <label class="form-check-label" [for]="'role_' + role.id">
-              {{ role.roleName }}
-            </label>
+            <label class="form-check-label" [for]="'role_' + role.id">{{ role.roleName }}</label>
           </div>
-          <div *ngIf="userEditForm.get('idRole')?.invalid && userEditForm.get('idRole')?.touched" class="text-danger small">
+          <div
+            *ngIf="userEditForm.get('idRole')?.invalid && userEditForm.get('idRole')?.touched"
+            class="text-danger small">
             Please select a role.
           </div>
         </div>
 
-        <!-- Add branch select here -->
         <div class="mb-3">
           <label for="branchId" class="form-label">Branch</label>
           <select id="branchId" class="form-select" formControlName="branchId">
             <option value="">Select Branch</option>
-            <option *ngFor="let branch of branches" [value]="branch.id">
-              {{ branch.name }}
-            </option>
+            <option *ngFor="let branch of branches" [value]="branch.id">{{ branch.name }}</option>
           </select>
-          <div *ngIf="userEditForm.get('branchId')?.invalid && userEditForm.get('branchId')?.touched" class="text-danger small">
+          <div
+            *ngIf="userEditForm.get('branchId')?.invalid && userEditForm.get('branchId')?.touched"
+            class="text-danger small">
             Please select a branch.
           </div>
         </div>
@@ -148,4 +154,3 @@
     </div>
   </div>
 </ng-template>
-
