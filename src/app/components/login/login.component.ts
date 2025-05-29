@@ -21,27 +21,40 @@ export class LoginComponent {
     this.authService.login(this.authRequest).subscribe({
       next: (res) => {
         this.authService.saveUserDetails(res);
+
+        const role = this.authService.getUserRole();
+        if (role === 'CUSTOMER') {
+          this.error = 'Customers are not allowed to log in here, Please use the Goceng App.';
+          this.authService.logout();
+          return;
+        }
+
         this.error = '';
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        if (err?.error) {
-          if (typeof err.error === 'object') {
-            this.error = err.error.message || 
-                         (typeof err.error.errors === 'object' ? 
-                          Object.values(err.error.errors).join(' ') : 
-                          JSON.stringify(err.error));
-          } else if (typeof err.error === 'string') {
+        console.error('Login error:', err);
+
+        // Check if it's the wrapped format from your backend
+        if (err?.status === 401 && err.error?.message) {
+          this.error = err.error.message;
+        } else if (err?.error) {
+          // If error is a plain string
+          if (typeof err.error === 'string') {
             this.error = err.error;
-          } else {
-            this.error = 'An unknown error occurred.';
           }
-        } else if (err.message) {
-          this.error = err.message;
+          // If error has a nested message
+          else if (typeof err.error === 'object') {
+            this.error = err.error.message || 'Login failed. Please try again.';
+          } else {
+            this.error = 'Unexpected error occurred.';
+          }
         } else {
           this.error = 'Invalid login credentials. Please try again.';
         }
       }
+
     });
   }
+
 }
