@@ -45,6 +45,13 @@ export const routes: Routes = [
         data: { roles: ['ROLE_SUPERADMIN'] }
       },
       {
+        path: 'manage-features',
+        loadComponent: () =>
+          import('./components/manage-feature/manage-feature.component').then(m => m.ManageFeatureComponent),
+        canActivate: [RoleGuard],
+        data: { roles: ['ROLE_SUPERADMIN'] }
+      },
+      {
         path: 'approval',
         loadComponent: () =>
           import('./components/application-approval/application-approval.component').then(m => m.ApplicationApprovalComponent),

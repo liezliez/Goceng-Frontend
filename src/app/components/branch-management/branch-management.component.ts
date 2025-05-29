@@ -122,4 +122,9 @@ export class BranchManagementComponent implements OnInit {
       this.currentPage = page;
     }
   }
+
+  applyFilter(): void {
+    this.currentPage = 1; // Reset page when filter changes, for example
+  }
+
 }

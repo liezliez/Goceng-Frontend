@@ -39,6 +39,12 @@ export const FEATURE_BASED_MENU: MenuItem[] = [
     feature: 'MANAGE_BRANCHES'
   },
   {
+    label: 'Feature Management',
+    icon: 'bi-toggle-on',
+    route: '/manage-features',
+    feature: 'MANAGE_FEATURES'
+  },
+  {
     label: 'Change Password',
     icon: 'bi-key',
     route: '/change-password',
