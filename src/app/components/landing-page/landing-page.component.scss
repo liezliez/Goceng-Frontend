@@ -7,10 +7,39 @@ $text-muted: #6b7280;
 $caption-bg: rgba(255, 255, 255, 0.85);
 
 // Gradient Background for Page
-.gradient-custom {
-  background: linear-gradient(to right, $bg-gradient-start, $bg-gradient-end);
-  min-height: 100vh;
+  .gradient-custom {
+    background: linear-gradient(to right, $bg-gradient-start, $bg-gradient-end);
+    min-height: 100vh;
+  }
+
+// Hero Section Styling
+
+  .hero-section {
+    color: #3d4247; // override global white
+  }
+  .hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    .dark-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(49, 49, 49, 0.3);
+      z-index: 1;
+    }
+
+    img {
+      position: absolute;
+      z-index: 0; // Behind the overlay
+    }
 }
+
 
 // Login Card Styling
 .login-card {

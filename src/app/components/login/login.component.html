@@ -1,48 +1,50 @@
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow rounded-4 p-4 text-center">
-        <img 
-          src="assets/dashtrap/images/logo/Logo caption.png" 
-          alt="Goceng Logo" 
-          class="mb-4 mx-auto d-block" 
-          style="max-width: 200px; margin-bottom: -40px; height: auto;"
-        />
-        <h2 class="mb-4">Login Goceng-WEB</h2>
+<div class="login-background">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow rounded-4 p-4 text-center login-card">
+          <img 
+            src="assets/dashtrap/images/logo/Logo caption.png" 
+            alt="Goceng Logo" 
+            class="mb-4 mx-auto d-block" 
+            style="max-width: 200px; margin-bottom: -40px; height: auto;"
+          />
+          <h2 class="mb-4">Login Goceng-WEB</h2>
 
-        <form (ngSubmit)="onLogin()" novalidate>
-          <div class="mb-3 text-start">
-            <label for="email" class="form-label">Email</label>
-            <input
-              id="email"
-              [(ngModel)]="authRequest.email"
-              name="email"
-              type="email"
-              class="form-control"
-              required
-              autocomplete="email"
-            />
-          </div>
+          <form (ngSubmit)="onLogin()" novalidate>
+            <div class="mb-3 text-start">
+              <label for="email" class="form-label">Email</label>
+              <input
+                id="email"
+                [(ngModel)]="authRequest.email"
+                name="email"
+                type="email"
+                class="form-control"
+                required
+                autocomplete="email"
+              />
+            </div>
 
-          <div class="mb-3 text-start">
-            <label for="password" class="form-label">Password</label>
-            <input
-              id="password"
-              [(ngModel)]="authRequest.password"
-              name="password"
-              type="password"
-              class="form-control"
-              required
-              autocomplete="current-password"
-            />
-          </div>
+            <div class="mb-3 text-start">
+              <label for="password" class="form-label">Password</label>
+              <input
+                id="password"
+                [(ngModel)]="authRequest.password"
+                name="password"
+                type="password"
+                class="form-control"
+                required
+                autocomplete="current-password"
+              />
+            </div>
 
-          <div *ngIf="error" class="alert alert-danger" aria-live="polite">
-            {{ error }}
-          </div>
+            <div *ngIf="error" class="alert alert-danger" aria-live="polite">
+              {{ error }}
+            </div>
 
-          <button type="submit" class="btn btn-primary w-100">Login</button>
-        </form>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

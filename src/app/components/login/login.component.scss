@@ -65,4 +65,17 @@ $button-text: #fff;
       background-color: $button-hover-bg;
     }
   }
+
+  .login-background {
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+                url('/src/assets/dashtrap/images/background/bg-main.png') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+
 }
