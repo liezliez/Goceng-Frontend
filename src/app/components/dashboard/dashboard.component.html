@@ -1,51 +1,63 @@
-<!-- Dashboard Wrapper: No background color -->
-<div class="dashboard-background min-vh-100 d-flex align-items-center justify-content-center py-5">
+<!-- Dashboard Wrapper -->
+<div class="dashboard-background min-vh-100 d-flex align-items-center justify-content-center py-4">
   <!-- Dashboard Container -->
   <div class="dashboard-container container px-3">
     <!-- Card -->
     <div class="card shadow rounded-4 border-0">
-      <div class="card-body px-4 py-5">
+      <div class="card-body px-4 py-4">
 
         <!-- Welcome Section -->
-        <section class="welcome-section text-center mb-5">
+        <section class="welcome-section text-center mb-4">
           <img
             src="assets/dashtrap/images/logo/Logo-caption-web.png"
             alt="Goceng Logo"
-            class="img-fluid mb-4"
-            style="max-height: 240px;"
+            class="img-fluid mb-3"
+            style="max-height: 200px;"
           />
-          <h1 class="display-6 fw-semibold">Welcome to Goceng Dashboard</h1>
-          <p class="lead text-muted">#PinjemDuluGoceng</p>
+          <h1 class="h4 fw-semibold">Welcome to Goceng Dashboard</h1>
+          <p class="text-muted mb-2">#PinjemDuluGoceng</p>
         </section>
 
         <!-- Branch Summary Section -->
-        <section class="branch-summary text-center mb-5">
-          <h2 class="h4 fw-bold mb-4 text-success">Branch Summary</h2>
+        <section class="branch-summary text-center mb-4">
+          <h2 class="h5 fw-bold mb-3 text-success">Branch Summary</h2>
           <div class="row justify-content-center">
-            <div class="col-md-4 mb-3">
-              <div class="p-4 shadow-sm bg-light rounded-3">
-                <h5>Total Users</h5>
-                <p class="display-6">{{ totalUsers }}</p>
+            <div class="col-md-4 mb-2">
+              <div class="p-3 shadow-sm bg-light rounded-3">
+                <h6>Total Users</h6>
+                <p class="h4">{{ totalUsers }}</p>
               </div>
             </div>
-            <div class="col-md-4 mb-3">
-              <div class="p-4 shadow-sm bg-light rounded-3">
-                <h5>Total Applications</h5>
-                <p class="display-6">{{ totalApplications }}</p>
+            <div class="col-md-4 mb-2">
+              <div class="p-3 shadow-sm bg-light rounded-3">
+                <h6>Total Applications</h6>
+                <p class="h4">{{ totalApplications }}</p>
               </div>
             </div>
           </div>
         </section>
 
+        <!-- Pie Chart Section -->
+        <section class="pie-chart-section text-center mb-4">
+          <h2 class="h5 fw-bold mb-3 text-info">User Distribution</h2>
+          <div class="d-flex justify-content-center">
+            <div style="max-width: 180px; width: 100%;">
+              <canvas baseChart
+                [type]="'pie'"
+                [data]="pieChartData"
+                [options]="pieChartOptions">
+              </canvas>
+            </div>
+          </div>
+        </section>
 
         <!-- News Section -->
         <section class="news-section">
-          <h2 class="h4 fw-bold mb-4 text-primary">Latest News</h2>
-          <div *ngFor="let newsItem of news" class="news-item mb-3 p-3 rounded-3 shadow-sm">
-            <h5 class="mb-1">{{ newsItem.title }}</h5>
-            <p class="mb-0 text-muted">{{ newsItem.description }}</p>
+          <h2 class="h5 fw-bold mb-3 text-primary">Latest News</h2>
+          <div *ngFor="let newsItem of news" class="news-item mb-2 p-3 rounded-3 shadow-sm">
+            <h6 class="mb-1">{{ newsItem.title }}</h6>
+            <p class="mb-0 text-muted small">{{ newsItem.description }}</p>
           </div>
-          
         </section>
 
       </div>

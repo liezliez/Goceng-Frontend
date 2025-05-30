@@ -8,6 +8,29 @@ import { AuthInterceptor } from './app/interceptors/auth.interceptor';
 import { registerLocaleData } from '@angular/common';
 import localeId from '@angular/common/locales/id';
 
+import {
+  Chart,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  PieController,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+Chart.register(
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  PieController,
+  ArcElement,
+  Tooltip,
+  Legend
+);
+
 registerLocaleData(localeId);
 
 bootstrapApplication(AppComponent, {
@@ -17,6 +40,6 @@ bootstrapApplication(AppComponent, {
     ),
     provideRouter(routes),
     provideAnimations(),
-    {provide: localeId, useValue: 'id-ID'},
+    { provide: localeId, useValue: 'id-ID' },
   ]
 }).catch(err => console.error(err));
