@@ -74,9 +74,9 @@ export class ResetPasswordComponent implements OnInit {
         sessionStorage.clear();
 
         // Notify user of success and redirect after delay
-        this.successMessage = 'Password reset successful. Redirecting to login page...';
+        this.successMessage = 'Password reset successful. Please try logging in with your new password in goceng app..';
         setTimeout(() => {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/']);
         }, 3000);
       },
       error: err => {

@@ -16,6 +16,11 @@ $color-main-text: #000127;
   font-family: 'Poppins', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 html,
 body {
   margin: 0;
