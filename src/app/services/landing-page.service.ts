@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';  // Import catchError for error handling
-import { of } from 'rxjs';  // Import 'of' to return fallback values in case of errors
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { environment } from '../../../src/environments/environment';
+
+
 
 // Assuming these interfaces are defined elsewhere
 interface Stats {
@@ -26,7 +29,7 @@ interface Testimonial {
   providedIn: 'root',
 })
 export class LandingPageService {
-  private baseUrl = 'http://localhost:8080/api/landing'; // Update if backend port changes
+  private baseUrl = `${environment.apiUrl}/applications`;
 
   constructor(private http: HttpClient) {}
 
